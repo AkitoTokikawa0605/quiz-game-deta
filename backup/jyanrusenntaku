@@ -1,0 +1,33 @@
+[_tb_system_call storage=system/_jyanrusentaku.ks]
+
+
+; --- ジャンル選択画面 ---
+
+
+*genre_select
+[cm  ]
+[hidemenubutton]
+
+[tb_hide_message_window  ]
+
+; 背景を表示（必要であれば画像パスを指定してください）
+
+
+[bg  storage="haikei/black.png"  time="500"  ]
+
+; タイトルを表示
+
+
+[ptext text="ジャンルを選んでください" size="40" x="400" y="100" color="white" layer="0"]
+
+
+; アニメボタン（押すと tf.genre に 'anime' を代入して難易度選択へ）
+
+
+[glink  target="*difficulty_select"  storage="gametenpure.ks"  text="アニメ"  x="400"  y="250"  size="25"  width="300"  exp="tf.genre='anime'"  ]
+
+; ゲームボタン（押すと tf.genre に 'game' を代入して難易度選択へ）
+
+
+[glink  target="*difficulty_select"  storage="gametenpure.ks"  text="ゲーム"  x="400"  y="350"  size="25"  width="300"  exp="tf.genre='game'"  ]
+[s  ]
