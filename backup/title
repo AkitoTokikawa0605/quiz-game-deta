@@ -1,0 +1,81 @@
+[_tb_system_call storage=system/_title_screen.ks]
+
+
+; --- タイトル画面（完全版） ---
+
+
+[cm  ]
+[hidemenubutton]
+
+
+; 【冒頭】最低限の掃除
+
+
+[freeimage layer="1"]
+
+[freeimage layer="2"]
+
+[tb_clear_images]
+
+
+; 1. 動画再生
+
+
+[movie  storage="sdp.mp4"  skip="false"  ]
+[image layer="1" page="fore" storage="logo/logo.png" x="240" y="160" name="logo" time="500"]
+
+
+; 2. 演出待機
+
+
+[wait  time="4000"  ]
+
+; 3. 背景切り替え（動画とロゴはここで自動的に消えます）
+
+
+[bg  storage="UI/title.png"  time="800"  ]
+
+; --- ここが重要：CLICK TO START を表示してクリックを待つ ---
+
+
+[image layer="2" page="fore" storage="gif/cts.gif" x="240" y="520" name="blink_text"]
+
+[clickable  x="0"  y="0"  width="1280"  height="720"  target="*show_menu"  storage="title_screen.ks"  ]
+[s  ]
+
+; ←ここでプレイヤーのクリックを待ちます[p]
+; --- クリックされたらここへ飛ぶ ---
+
+
+*show_menu
+
+[cm  ]
+
+; 画面をクリア！[p]
+
+
+[freeimage layer="2"]
+
+
+; CTSを消す[p]
+
+
+[freeimage layer="1"]
+
+
+; ロゴなどを念のため消す[p]
+; ボタンの画像名を「01_blue.png」に変更しました！
+
+
+[button  target="*game_start"  graphic="button/01_blue.png"  x="400"  y="300"  storage="title_screen.ks"  width="300"  ]
+[button  target="*game_option"  graphic="button/01_blue.png"  x="400"  y="450"  storage="title_screen.ks"  width="300"  ]
+[s  ]
+
+; --- ボタンが押された時の処理 ---
+
+
+*game_start
+
+[tb_keyconfig  flag="1"  ]
+[jump  storage="jyanrusentaku.ks"  target="*genre_select"  ]
+[s  ]
