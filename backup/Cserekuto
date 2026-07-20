@@ -1,148 +1,127 @@
-[jump storage="system/_Character_Select.ks" target="*select_chara"]
-
-
-;=================================
-; キャラクター選択 Ver0.1
-;=================================
-
+;================================
+; キャラクター選択画面
+;================================
 
 *select_chara
 
-[cm  ]
-[p]
+[cm]
 
-[hidemenubutton]
-
-[p]
-
-[bg  storage="haikei/option_haikei.png"  time="500"  ]
-[p]
+[bg storage="haikei/option_haikei.png" time="500"]
 
 
-;---------------------------------
+;================================
 ; 初期設定
-;---------------------------------
-
+;================================
 
 [iscript]
-[p]
-f.chara_index = 0;
-f.chara_list = [
-"chara1",
-"chara2",
-"chara3",
-"chara4"
-];
-f.chara_img = f.chara_list[f.chara_index] + ".png";[p]
-[iscript]
+if (f.current_idx == undefined) {
+    f.current_idx = 1;
+}
 [endscript]
 
 
-;---------------------------------
+;================================
 ; 表示更新
-;---------------------------------
-
+;================================
 
 *update_chara
 
-[iscript]
-if (f.chara_list == undefined) {
-f.chara_list = [
-"chara1",
-"chara2",
-"chara3",
-"chara4"
-];
-}
-if (f.chara_index == undefined) {
-f.chara_index = 0;
-}
-f.chara_img = f.chara_list[f.chara_index] + ".png";
-console.log("index=" + f.chara_index);
-console.log("image=" + f.chara_img);
-[endscript]
-
-[freeimage layer="1"]
+[freeimage layer="2"]
 
 
-storage="chara/&f.chara_img"[p]
-layer="1"[p]
-x="440"[p]
-y="150"[p]
-width="400"[p]
-][p]
-storage="chara/&f.chara_img"[p]
-layer="1"[p]
-x="440"[p]
-y="150"[p]
-width="400"[p]
-][p]
-;---------------------------------
+; キャラクター表示
+[if exp="f.current_idx == 1"]
+[image storage="chara/chara1.png" layer="2" x="440" y="150" width="400"]
+[endif]
+
+[if exp="f.current_idx == 2"]
+[image storage="chara/chara2.png" layer="2" x="440" y="150" width="400"]
+[endif]
+
+[if exp="f.current_idx == 3"]
+[image storage="chara/chara3.png" layer="2" x="440" y="150" width="400"]
+[endif]
+
+[if exp="f.current_idx == 4"]
+[image storage="chara/chara4.png" layer="2" x="440" y="150" width="400"]
+[endif]
+
+
+; タイトル文字
+
+[ptext text="キャラクター選択" size="40" x="640" y="50" color="white" align="center" layer="2"]
+
+
+;================================
 ; ボタン
-;---------------------------------
-text="＜"[p]
-target="*prev"[p]
-x="300"[p]
-y="350"[p]
-width="100"[p]
-][p]
-text="＞"[p]
-target="*next"[p]
-x="880"[p]
-y="350"[p]
-width="100"[p]
-][p]
-text="決定"[p]
-target="*decide"[p]
-x="440"[p]
-y="600"[p]
-width="400"[p]
-][p]
+;================================
+
+[glink target="*prev_chara" graphic="button/03_blue.png" text="＜" x="300" y="350" width="100" layer="2"]
+
+[glink target="*next_chara" graphic="button/03_blue.png" text="＞" x="880" y="350" width="100" layer="2"]
+
+[glink target="*confirm_chara" graphic="button/01_blue.png" text="決定" x="440" y="600" width="400" layer="2"]
 
 
-[s  ]
+[s]
 
-;=================================
+
+
+;================================
 ; 前のキャラ
-;=================================
+;================================
 
-
-*prev
+*prev_chara
 
 [iscript]
-f.chara_index--;
-if (f.chara_index < 0) {
-f.chara_index = f.chara_list.length - 1;
+
+f.current_idx--;
+
+if (f.current_idx < 1) {
+    f.current_idx = 4;
 }
+
 [endscript]
 
-[jump  target="*update_chara"  storage=""  ]
+[jump target="*update_chara"]
 
-;=================================
+
+
+;================================
 ; 次のキャラ
-;=================================
+;================================
 
-
-*next
+*next_chara
 
 [iscript]
-f.chara_index++;
-if (f.chara_index >= f.chara_list.length) {
-f.chara_index = 0;
+
+f.current_idx++;
+
+if (f.current_idx > 4) {
+    f.current_idx = 1;
 }
+
 [endscript]
 
-[jump  target="*update_chara"  storage=""  ]
+[jump target="*update_chara"]
 
-;=================================
+
+
+;================================
 ; 決定
-;=================================
+;================================
 
-
-*decide
+*confirm_chara
 
 [iscript]
-sf.selected_chara = f.chara_list[f.chara_index];
+
+sf.selected_chara = "chara" + f.current_idx;
+
+console.log("選択キャラ：" + sf.selected_chara);
+
 [endscript]
 
-[jump  storage="title_screen.ks"  target="*show_menu"  ]
+
+[ptext text="このキャラクターに決定しました！" size="35" x="640" y="300" color="white" align="center" layer="2"]
+
+[s]
