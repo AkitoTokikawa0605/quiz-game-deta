@@ -1,0 +1,148 @@
+[jump storage="system/_Character_Select.ks" target="*select_chara"]
+
+
+;=================================
+; キャラクター選択 Ver0.1
+;=================================
+
+
+*select_chara
+
+[cm  ]
+[p]
+
+[hidemenubutton]
+
+[p]
+
+[bg  storage="haikei/option_haikei.png"  time="500"  ]
+[p]
+
+
+;---------------------------------
+; 初期設定
+;---------------------------------
+
+
+[iscript]
+[p]
+f.chara_index = 0;
+f.chara_list = [
+"chara1",
+"chara2",
+"chara3",
+"chara4"
+];
+f.chara_img = f.chara_list[f.chara_index] + ".png";[p]
+[iscript]
+[endscript]
+
+
+;---------------------------------
+; 表示更新
+;---------------------------------
+
+
+*update_chara
+
+[iscript]
+if (f.chara_list == undefined) {
+f.chara_list = [
+"chara1",
+"chara2",
+"chara3",
+"chara4"
+];
+}
+if (f.chara_index == undefined) {
+f.chara_index = 0;
+}
+f.chara_img = f.chara_list[f.chara_index] + ".png";
+console.log("index=" + f.chara_index);
+console.log("image=" + f.chara_img);
+[endscript]
+
+[freeimage layer="1"]
+
+
+storage="chara/&f.chara_img"[p]
+layer="1"[p]
+x="440"[p]
+y="150"[p]
+width="400"[p]
+][p]
+storage="chara/&f.chara_img"[p]
+layer="1"[p]
+x="440"[p]
+y="150"[p]
+width="400"[p]
+][p]
+;---------------------------------
+; ボタン
+;---------------------------------
+text="＜"[p]
+target="*prev"[p]
+x="300"[p]
+y="350"[p]
+width="100"[p]
+][p]
+text="＞"[p]
+target="*next"[p]
+x="880"[p]
+y="350"[p]
+width="100"[p]
+][p]
+text="決定"[p]
+target="*decide"[p]
+x="440"[p]
+y="600"[p]
+width="400"[p]
+][p]
+
+
+[s  ]
+
+;=================================
+; 前のキャラ
+;=================================
+
+
+*prev
+
+[iscript]
+f.chara_index--;
+if (f.chara_index < 0) {
+f.chara_index = f.chara_list.length - 1;
+}
+[endscript]
+
+[jump  target="*update_chara"  storage=""  ]
+
+;=================================
+; 次のキャラ
+;=================================
+
+
+*next
+
+[iscript]
+f.chara_index++;
+if (f.chara_index >= f.chara_list.length) {
+f.chara_index = 0;
+}
+[endscript]
+
+[jump  target="*update_chara"  storage=""  ]
+
+;=================================
+; 決定
+;=================================
+
+
+*decide
+
+[iscript]
+sf.selected_chara = f.chara_list[f.chara_index];
+[endscript]
+
+[jump  storage="title_screen.ks"  target="*show_menu"  ]
