@@ -1,0 +1,125 @@
+[_tb_system_call storage=system/_option.ks]
+*start
+
+; スライダープラグインを読み込む
+
+
+[plugin name="uiparts_set"]
+
+
+[cm  ]
+[clearfix]
+
+[freeimage layer="1"]
+
+[hidemenubutton]
+
+
+; レイヤー1を表示状態にする
+
+
+[layopt layer="1" visible="true"]
+
+
+; 変数の初期値設定
+
+
+[iscript]
+if(sf.bgm_vol == undefined){ sf.bgm_vol = 50; }
+if(sf.se_vol == undefined){ sf.se_vol = 50; }
+if(sf.voice_vol == undefined){ sf.voice_vol = 50; }
+if(sf.screen_mode == undefined){ sf.screen_mode = 0; }
+[endscript]
+
+
+; 背景を表示
+
+
+[bg  storage="haikei/option_haikei.png"  time="500"  ]
+
+; タイトル
+
+
+[ptext layer="1" page="fore" text="OPTIONS" x="640" y="100" size="64" color="white" align="center"]
+
+
+; BGM音量
+
+
+[ptext layer="1" page="fore" text="BGM音量" x="200" y="250" size="24" color="#5a67d8"]
+
+[slider name="bgm_slider" x="400" y="250" width="600" min="0" max="100" var="sf.bgm_vol" target="*change_bgm"]
+
+
+; SE音量
+
+
+[ptext layer="1" page="fore" text="SE音量" x="200" y="350" size="24" color="#5a67d8"]
+
+[slider name="se_slider" x="400" y="350" width="600" min="0" max="100" var="sf.se_vol" target="*change_se"]
+
+
+; ボイス音量
+
+
+[ptext layer="1" page="fore" text="ボイス音量" x="200" y="450" size="24" color="#5a67d8"]
+
+[slider name="voice_slider" x="400" y="450" width="600" min="0" max="100" var="sf.voice_vol" target="*change_voice"]
+
+
+; --- 画面モード：トグル切り替え（1つにまとめました！） ---
+
+
+[ptext layer="1" page="fore" text="画面設定" x="300" y="585" size="24" color="#ff8fa3"]
+
+[glink  color="white_rounded"  size="24"  x="450"  y="585"  text="画面モード切替"  target="*mode_toggle"  ]
+
+; 戻るボタン
+
+
+[glink  color="white_rounded"  size="24"  x="1000"  y="585"  text="戻る"  target="*back_to_title"  ]
+[s  ]
+
+; --- 処理部 ---
+
+
+*change_bgm
+
+[bgmopt volume="&sf.bgm_vol"]
+
+[return  ]
+*change_se
+
+[seopt volume="&sf.se_vol"]
+
+[return  ]
+*change_voice
+
+[seopt buf="2" volume="&sf.voice_vol"]
+
+[return  ]
+*mode_toggle
+
+[if exp="sf.screen_mode==0"]
+
+[screen_full]
+
+[eval exp="sf.screen_mode=1"]
+
+[else]
+
+[screen_full full="false"]
+
+[eval exp="sf.screen_mode=0"]
+
+[endif]
+
+[jump  target="*start"  storage=""  ]
+*back_to_title
+
+[cm  ]
+[clearfix]
+
+[freeimage layer="1"]
+
+[jump  storage="title_screen.ks"  target="*show_menu"  ]
