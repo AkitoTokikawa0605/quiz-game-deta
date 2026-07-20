@@ -22,52 +22,47 @@
 
 
 [movie  storage="sdp.mp4"  skip="false"  ]
-[image layer="1" page="fore" storage="logo/logo.png" x="240" y="160" name="logo" time="500"]
-
 
 ; 2. 演出待機
 
 
 [wait  time="4000"  ]
 
-; 3. 背景切り替え（動画とロゴはここで自動的に消えます）
+; 3. 背景切り替え
 
 
 [bg  storage="UI/title.png"  time="800"  ]
 
-; --- ここが重要：CLICK TO START を表示してクリックを待つ ---
+; --- CLICK TO START を表示 ---
 
+
+*title_loop
 
 [image layer="2" page="fore" storage="gif/cts.gif" x="240" y="520" name="blink_text"]
 
 [clickable  x="0"  y="0"  width="1280"  height="720"  target="*show_menu"  storage="title_screen.ks"  ]
 [s  ]
 
-; ←ここでプレイヤーのクリックを待ちます[p]
-; --- クリックされたらここへ飛ぶ ---
+; --- メニュー表示 ---
 
 
 *show_menu
 
+[bg  storage="UI/title.png"  time="800"  ]
 [cm  ]
-
-; 画面をクリア！[p]
-
-
 [freeimage layer="2"]
-
-
-; CTSを消す[p]
-
 
 [freeimage layer="1"]
 
 
-; ロゴなどを念のため消す[p]
-; ボタンの画像名を「01_blue.png」に変更しました！
+; ボタンを表示
 
 
 [button  target="*game_start"  graphic="button/01_blue.png"  x="400"  y="300"  storage="title_screen.ks"  width="300"  ]
+
+; ↓ここがポイント！オプションへ飛ぶボタン
+
+
 [button  target="*game_option"  graphic="button/01_blue.png"  x="400"  y="450"  storage="title_screen.ks"  width="300"  ]
 [s  ]
 
@@ -78,4 +73,17 @@
 
 [tb_keyconfig  flag="1"  ]
 [jump  storage="jyanrusentaku.ks"  target="*genre_select"  ]
+[s  ]
+
+; ↓ここを追加！
+
+
+*game_option
+
+[cm  ]
+
+; オプション画面が書かれているファイル名を指定してください（例: option.ks）
+
+
+[jump  storage="option.ks"  target="*start"  ]
 [s  ]
