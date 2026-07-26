@@ -41,6 +41,11 @@ if(sf.voice_vol == undefined){ sf.voice_vol = 50; }
 
 [bg  storage="haikei/option_haikei.png"  time="500"  ]
 
+; オプション専用BGM
+
+
+[playbgm  storage="bgm1.ogg"  loop="true"  ]
+
 ; タイトル
 
 
