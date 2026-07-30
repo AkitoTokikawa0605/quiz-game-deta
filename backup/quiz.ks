@@ -1,133 +1,233 @@
+[_tb_system_call storage=system/_quiz_animation.ks]
+
+
 ; --- 1. 難易度選択 ---
+
+
 *difficulty_select
+
 [hidemenubutton]
-[cm]
-[tb_hide_message_window]
-難易度を選んでください！[r]
-[glink target="*start_game" text="イージー" x="200" y="200" exp="tf.diff='easy'"]
-[glink target="*start_game" text="ノーマル" x="200" y="300" exp="tf.diff='normal'"]
-[glink target="*start_game" text="ハード"   x="200" y="400" exp="tf.diff='hard'"]
-[s]
+
+[cm  ]
+[tb_hide_message_window  ]
+[freeimage layer="0"]
+
+[freeimage layer="1"]
+
+[ptext text="難易度を選んでください！" size="30" x="440" y="100" color="black" align="center" layer="0"]
+
+[glink  target="*start_game"  text="イージー"  x="500"  y="200"  exp="tf.diff='easy'"  width="200"  ]
+[glink  target="*start_game"  text="ノーマル"  x="500"  y="300"  exp="tf.diff='normal'"  width="200"  ]
+[glink  target="*start_game"  text="ハード"  x="500"  y="400"  exp="tf.diff='hard'"  width="200"  ]
+[glink  target="*start_game"  text="ベリーハード"  x="500"  y="500"  exp="tf.diff='veryhard'"  width="200"  ]
+[s  ]
 
 ; --- 2. ゲーム開始設定 ---
+
+
 *start_game
+
+[cm  ]
+[freeimage layer="0"]
+
 [iscript]
+// ★ここにクイズ50問のデータが入ります（そのまま活かしています）
 tf.all_questions = [
-    {q: "第1問", difficulty: "easy", choices: ["アニメ『ドラえもん』で、ドラえもんが一番大好物な食べ物は何でしょう？", "A.どら焼き", "B.みたらし団子", "C.カレーライス", "D.鉄"], ans: "A"},	
-    {q: "第2問", difficulty: "easy", choices: ["アニメ『名探偵コナン』の主人公、江戸川コナンの正体は誰でしょう？", "A.毛利小五郎", "B.工藤新一", "C.阿笠博士", "D.怪盗キッド"], ans: "B"},	
-    {q: "第3問", difficulty: "easy", choices: ["アニメ『ポケットモンスター』で、主人公サトシの最初のパートナーであるポケモンは何でしょう？", "A.ヒトカゲ", "B.ゼニガメ", "C.フシギダネ", "D.ピカチュウ"], ans: "D"},	
-    {q: "第4問", difficulty: "easy", choices: ["アニメ『ONE PIECE』の主人公、モンキー・D・ルフィが食べた「悪魔の実」の名前は何でしょう？", "A.ゴムゴムの実", "B.メラメラの実", "C.バラバラの実", "D.スナスナの実"], ans: "A"},	
-    {q: "第5問", difficulty: "easy", choices: ["アニメ『アンパンマン』で、アンパンマンの顔が汚れた時、新しい顔を焼いてくれる人は誰でしょう？", "A.バタコさん", "B.ジャムおじさん", "C.チーズ", "D.メロンパンナ"], ans: "B"},	
-    {q: "第6問", difficulty: "normal", choices: ["アニメ『新世紀エヴァンゲリオン』で、主人公の碇シンジが搭乗するロボットの名前は何でしょう？", "A.エヴァンゲリオン零号機", "B.エヴァンゲリオン初号機", "C.エヴァンゲリオン弐号機", "D.エヴァンゲリオン仮設5号機"], ans: "B"},	
-    {q: "第7問", difficulty: "easy", choices: ["アニメ『サザエさん』の舞台となっている町はどこでしょう？", "A.世田谷区桜新町", "B.港区麻布十番", "C.杉並区阿佐ヶ谷", "D.練馬区大泉学園"], ans: "A"},	
-    {q: "第8問", difficulty: "easy", choices: ["アニメ『鬼滅の刃』の主人公、炭治郎が背負っている箱の中に入っているのは誰でしょう？", "A.善逸", "B.伊之助", "C.禰豆子", "D.カナヲ"], ans: "C"},	
-    {q: "第9問", difficulty: "easy", choices: ["アニメ『ドラゴンボール』シリーズで、7つ揃えると願いが叶うアイテムは何でしょう？", "A.ドラゴンボール", "B.四星球", "C.仙豆", "D.ホイポイカプセル"], ans: "A"},	
-    {q: "第10問", difficulty: "easy", choices: ["アニメ『ちびまる子ちゃん』の主人公、まる子の本名は何でしょう？", "A.さくら まる子", "B.さくら ももこ", "C.さくら さきこ", "D.さくら あけみ"], ans: "B"},
-    {q: "第11問", difficulty: "easy", choices: ["アニメ『となりのトトロ』で、サツキとメイが乗る不思議な乗り物は何？", "A.ネコバス", "B.ホウキ", "C.トトロの背中", "D.ジブリバス"], ans: "A"},
-    {q: "第12問", difficulty: "easy", choices: ["アニメ『美少女戦士セーラームーン』の決めゼリフは？", "A.月に代わって反省よ！", "B.月に代わっておしおきよ！", "C.愛と正義のセーラー服！", "D.月に代わって参上！"], ans: "B"},
-    {q: "第13問", difficulty: "normal", choices: ["アニメ『進撃の巨人』で人類を守る壁の名前は？", "A.ウォール・ローズ", "B.ウォール・エレン", "C.ウォール・マンガ", "D.ウォール・リヴァイ"], ans: "A"},
-    {q: "第14問", difficulty: "easy", choices: ["アニメ『北斗の拳』ケンシロウの決めゼリフは？", "A.お前はもう消えている", "B.お前はもう死んでいる", "C.北斗百裂拳！", "D.さらばだ！"], ans: "B"},
-    {q: "第15問", difficulty: "hard", choices: ["アニメ『ルパン三世』のルパンが愛用する車は？", "A.フェラーリ", "B.ベンツ", "C.フィアット", "D.ポルシェ"], ans: "C"},
-    {q: "第16問", difficulty: "easy", choices: ["アニメ『クレヨンしんちゃん』で、しんのすけが好きなチョコ味のお菓子は？", "A.チョコボール", "B.チョコビ", "C.チョコチップ", "D.チョコバー"], ans: "B"},
-    {q: "第17問", difficulty: "normal", choices: ["アニメ『呪術廻戦』で、虎杖悠仁が受肉している呪霊は？", "A.五条悟", "B.伏黒恵", "C.両面宿儺", "D.真人"], ans: "C"},
-    {q: "第18問", difficulty: "normal", choices: ["アニメ『鋼の錬金術師』エドワードの弟の名前は？", "A.アルフォンス", "B.ロイ", "C.マース", "D.ヴァン"], ans: "A"},
-    {q: "第19問", difficulty: "easy", choices: ["アニメ『機動戦士ガンダム』でアムロが乗ったのは？", "A.ザク", "B.ガンキャノン", "C.ガンダム", "D.ドム"], ans: "C"},
-    {q: "第20問", difficulty: "easy", choices: ["アニメ『タッチ』の達也が甲子園を目指すスポーツは？", "A.サッカー", "B.野球", "C.バスケ", "D.テニス"], ans: "B"},
-    {q: "第21問", difficulty: "normal", choices: ["アニメ『銀魂』の坂田銀時が営むお店は？", "A.何でも屋", "B.便利屋", "C.万事屋", "D.よろず屋"], ans: "C"},
-    {q: "第22問", difficulty: "easy", choices: ["アニメ『スラムダンク』の桜木花道が所属する部活は？", "A.野球部", "B.サッカー部", "C.バスケットボール部", "D.ラグビー部"], ans: "C"},
-    {q: "第23問", difficulty: "normal", choices: ["アニメ『葬送のフリーレン』の主人公の種族は？", "A.人間", "B.ドワーフ", "C.エルフ", "D.魔族"], ans: "C"},
-    {q: "第24問", difficulty: "hard", choices: ["アニメ『プリキュア』シリーズ第1作のタイトルは？", "A.プリキュア", "B.ふたりはプリキュア", "C.プリキュア5", "D.ハピネスチャージプリキュア"], ans: "B"},
-    {q: "第25問", difficulty: "easy", choices: ["アニメ『けいおん！』の主人公たちが所属する部活は？", "A.美術部", "B.吹奏楽部", "C.軽音部", "D.合唱部"], ans: "C"},
-    {q: "第26問", difficulty: "hard", choices: ["アニメ『頭文字D』の藤原拓海が乗る車は？", "A.ハチロク（AE86）", "B.スープラ", "C.GT-R", "D.RX-7"], ans: "A"},
-    {q: "第27問", difficulty: "normal", choices: ["アニメ『進撃の巨人』でエレンが所属する兵団は？", "A.駐屯兵団", "B.調査兵団", "C.憲兵団", "D.訓練兵団"], ans: "B"},
-    {q: "第28問", difficulty: "normal", choices: ["アニメ『銀河鉄道999』で星野鉄郎と旅をする美女は？", "A.エメラルダス", "B.メーテル", "C.クレア", "D.星野"], ans: "B"},
-    {q: "第29問", difficulty: "normal", choices: ["アニメ『転生したらスライムだった件』のリムルの元の姿は？", "A.魔王", "B.勇者", "C.サラリーマン", "D.スライム"], ans: "C"},
-    {q: "第30問", difficulty: "hard", choices: ["アニメ『犬夜叉』のヒロイン・かごめが現代から持ってくるお菓子は？", "A.ポテトチップス", "B.カップラーメン", "C.チョコレート", "D.クッキー"], ans: "B"},
-    {q: "第31問", difficulty: "easy", choices: ["アニメ『暗殺教室』の先生の愛称は？", "A.殺せんせー", "B.暗殺せんせー", "C.タコせんせー", "D.黄せんせー"], ans: "A"},
-    {q: "第32問", difficulty: "hard", choices: ["アニメ『忍たま乱太郎』が通っている学校は？", "A.忍術専門学校", "B.忍術学園", "C.忍者学校", "D.乱太郎学園"], ans: "B"},
-    {q: "第33問", difficulty: "normal", choices: ["アニメ『ハイキュー!!』の主人公・日向翔陽の高校は？", "A.音駒高校", "B.青葉城西高校", "C.烏野高校", "D.白鳥沢学園"], ans: "C"},
-    {q: "第34問", difficulty: "easy", choices: ["アニメ『SPY×FAMILY』でアーニャが持つ能力は？", "A.予知能力", "B.読心術", "C.飛行能力", "D.瞬間移動"], ans: "B"},
-    {q: "第35問", difficulty: "easy", choices: ["アニメ『僕のヒーローアカデミア』緑谷出久のヒーロー名は？", "A.オールマイト", "B.デク", "C.かっちゃん", "D.ミドリ"], ans: "B"},
-    {q: "第36問", difficulty: "hard", choices: ["アニメ『シティハンター』で冴羽リョウが使われる言葉は？", "A.もっこり", "B.バズーカ", "C.ごっつぁん", "D.ラブラブ"], ans: "A"},
-    {q: "第37問", difficulty: "normal", choices: ["アニメ『カードキャプターさくら』でカードを封印する杖は？", "A.星の杖", "B.封印の杖", "C.マジカル杖", "D.さくらの杖"], ans: "B"},
-    {q: "第38問", difficulty: "normal", choices: ["アニメ『黒子のバスケ』の黒子テツヤの得意技は？", "A.シュート", "B.パス", "C.ダンク", "D.ドリブル"], ans: "B"},
-    {q: "第39問", difficulty: "easy", choices: ["アニメ『あしたのジョー』の矢吹丈のスポーツは？", "A.野球", "B.柔道", "C.ボクシング", "D.レスリング"], ans: "C"},
-    {q: "第40問", difficulty: "hard", choices: ["アニメ『千と千尋の神隠し』で湯婆婆が経営する場所は？", "A.銭湯", "B.ホテル", "C.油屋", "D.温泉旅館"], ans: "C"},
-    {q: "第41問", difficulty: "hard", choices: ["アニメ『家庭教師ヒットマンREBORN!』でリボーンの職業は？", "A.殺し屋", "B.ヒットマン", "C.教師", "D.ボディーガード"], ans: "B"},
-    {q: "第42問", difficulty: "hard", choices: ["アニメ『七つの大罪』の酒場の名前は？", "A.豚の帽子亭", "B.酒場の豚", "C.大罪の宿", "D.冒険者の酒場"], ans: "A"},
-    {q: "第43問", difficulty: "normal", choices: ["アニメ『ジョジョの奇妙な冒険』の特殊能力は？", "A.ハモン", "B.スタンド", "C.魔法", "D.気"], ans: "B"},
-    {q: "第44問", difficulty: "normal", choices: ["アニメ『ソードアート・オンライン』のデスゲームの名前は？", "A.ソードアート", "B.オンライン", "C.ソードアート・オンライン", "D.ゲーム・オブ・ソード"], ans: "C"},
-    {q: "第45問", difficulty: "hard", choices: ["アニメ『涼宮ハルヒの憂鬱』でハルヒが作った団体は？", "A.SOS団", "B.ハルヒ団", "C.不思議探検隊", "D.部活団"], ans: "A"},
-    {q: "第46問", difficulty: "easy", choices: ["アニメ『デスノート』のノートの名前は？", "A.死神ノート", "B.デスノート", "C.殺人ノート", "D.名前ノート"], ans: "B"},
-    {q: "第47問", difficulty: "hard", choices: ["アニメ『ヒカルの碁』でヒカルに取り憑くのは？", "A.藤原佐為", "B.平安の棋士", "C.天の声", "D.囲碁の神"], ans: "A"},
-    {q: "第48問", difficulty: "hard", choices: ["アニメ『マクロス』シリーズの要素は？", "A.歌とロボットと三角関係", "B.ダンスと剣と恋愛", "C.歌と魔法と友情", "D.ロボットとスポーツと絆"], ans: "A"},
-    {q: "第49問", difficulty: "normal", choices: ["アニメ『鋼の錬金術師』の最大のタブーは？", "A.金銀錬成", "B.人体錬成", "C.国家錬成", "D.賢者の石錬成"], ans: "B"},
-    {q: "第50問", difficulty: "normal", choices: ["アニメ『Dr.STONE』千空が使う学問は？", "A.物理学", "B.医学", "C.科学", "D.生物学"], ans: "C"},
+{q: "第1問", difficulty: "normal", choices: ["『呪術廻戦』で、虎杖悠仁が受肉することになった特級呪物は？", "A.両面宿儺の指", "B.獄門疆", "C.特級過呪怨霊", "D.天逆鉾"], ans: "A"},
+{q: "第2問", difficulty: "easy", choices: ["アニメ『ドラえもん』で、ドラえもんが一番大好物な食べ物は何でしょう？", "A.どら焼き", "B.みたらし団子", "C.カレーライス", "D.鉄"], ans: "A"},
+{q: "第3問", difficulty: "veryhard", choices: ["『不思議の海のナディア』の原案は？", "A.ジュール・ヴェルヌ", "B.H.G.ウェルズ", "C.エドガー・アラン・ポー", "D.アーサー・コナン・ドイル"], ans: "A"},
+{q: "第4問", difficulty: "hard", choices: ["『攻殻機動隊』の主人公、草薙素子の階級は？", "A.少佐", "B.大佐", "C.中佐", "D.軍曹"], ans: "A"},
+{q: "第5問", difficulty: "normal", choices: ["『鋼の錬金術師』で、エドワード・エルリックが失った体の部位は？", "A.右腕と左脚", "B.左腕と右脚", "C.両腕", "D.両脚"], ans: "A"},
+{q: "第6問", difficulty: "easy", choices: ["『ポケットモンスター』の主人公、サトシの最初の相棒といえば？", "A.ヒトカゲ", "B.ゼニガメ", "C.フシギダネ", "D.ピカチュウ"], ans: "D"},
+{q: "第7問", difficulty: "veryhard", choices: ["『魔法少女まどか☆マギカ』の脚本を書いた人物は？", "A.虚淵玄", "B.奈須きのこ", "C.虚空の王", "D.虚数空間"], ans: "A"},
+{q: "第8問", difficulty: "hard", choices: ["『うる星やつら』のラムちゃんが乗っている宇宙船のデザインは？", "A.UFO型", "B.円盤型", "C.虎柄のUFO", "D.飛行機型"], ans: "C"},
+{q: "第9問", difficulty: "normal", choices: ["『君の名は。』の監督は誰？", "A.宮崎駿", "B.新海誠", "C.細田守", "D.庵野秀明"], ans: "B"},
+{q: "第10問", difficulty: "easy", choices: ["『アンパンマン』の作者は誰？", "A.藤子・F・不二雄", "B.やなせたかし", "C.手塚治虫", "D.鳥山明"], ans: "B"},
+{q: "第11問", difficulty: "veryhard", choices: ["『輪るピングドラム』の監督は誰？", "A.幾原邦彦", "B.細田守", "C.湯浅政明", "D.今敏"], ans: "A"},
+{q: "第12問", difficulty: "hard", choices: ["『機動戦士ガンダム』で、シャア・アズナブルの異名「赤い彗星」の由来は？", "A.機体が赤いから", "B.移動速度が速いから", "C.赤い服を着ているから", "D.シャアが赤いから"], ans: "A"},
+{q: "第13問", difficulty: "normal", choices: ["『コードギアス 反逆のルルーシュ』で、主人公ルルーシュが持つ能力は？", "A.写輪眼", "B.ギアス", "C.念能力", "D.個性"], ans: "B"},
+{q: "第14問", difficulty: "easy", choices: ["『名探偵コナン』の主人公、江戸川コナンが本来の姿に戻るために追っている組織は？", "A.黒の組織", "B.赤の組織", "C.白の組織", "D.青の組織"], ans: "A"},
+{q: "第15問", difficulty: "veryhard", choices: ["『パプリカ』の原作小説を書いた作家は？", "A.筒井康隆", "B.星新一", "C.小松左京", "D.半村良"], ans: "A"},
+{q: "第16問", difficulty: "hard", choices: ["『未来少年コナン』で、コナンが住んでいた島は？", "A.のこされ島", "B.インダストリア", "C.ハイハーバー", "D.ラナの島"], ans: "A"},
+{q: "第17問", difficulty: "normal", choices: ["『銀魂』で、万事屋のメンバーでないのは？", "A.坂田銀時", "B.志村新八", "C.神楽", "D.土方十四郎"], ans: "D"},
+{q: "第18問", difficulty: "easy", choices: ["『となりのトトロ』で、サツキとメイが出会う不思議な生き物は？", "A.ネコバス", "B.トトロ", "C.まっくろくろすけ", "D.すべて正解"], ans: "D"},
+{q: "第19問", difficulty: "veryhard", choices: ["『灰羽連盟』の作者は？", "A.安倍吉俊", "B.村田蓮爾", "C.いとうのいぢ", "D.貞本義行"], ans: "A"},
+{q: "第20問", difficulty: "hard", choices: ["『BANANA FISH』の舞台である、アッシュ・リンクスが活動拠点とする街は？", "A.ロサンゼルス", "B.ニューヨーク", "C.シカゴ", "D.マイアミ"], ans: "B"},
+{q: "第21問", difficulty: "normal", choices: ["『デスノート』で、キラとして活動した主人公の名前は？", "A.夜神月", "B.L", "C.ニア", "D.メロ"], ans: "A"},
+{q: "第22問", difficulty: "easy", choices: ["『鬼滅の刃』の主人公、竈門炭治郎が背負っている箱に入っているのは？", "A.刀", "B.妹の禰豆子", "C.食料", "D.本"], ans: "B"},
+{q: "第23問", difficulty: "veryhard", choices: ["『ブレンパワード』の監督は誰？", "A.富野由悠季", "B.宮崎駿", "C.高畑勲", "D.押井守"], ans: "A"},
+{q: "第24問", difficulty: "hard", choices: ["『寄生獣』の主人公、新一の右手に寄生したミギーの食料は？", "A.肉", "B.野菜", "C.人間", "D.生物の細胞"], ans: "A"},
+{q: "第25問", difficulty: "normal", choices: ["『ハイキュー!!』の主人公、日向翔陽が所属する高校のバレーボール部員の特徴は？", "A.強豪校だが弱小", "B.落ちた強豪と呼ばれる", "C.無名の高校", "D.エリートが集まる高校"], ans: "B"},
+{q: "第26問", difficulty: "easy", choices: ["『ONE PIECE』で、ルフィが目指している海賊王の称号とは？", "A.世界一の剣豪", "B.海賊王", "C.世界皇帝", "D.大海賊"], ans: "B"},
+{q: "第27問", difficulty: "veryhard", choices: ["『地球へ…』の原作者は？", "A.竹宮惠子", "B.萩尾望都", "C.大島弓子", "D.山岸凉子"], ans: "A"},
+{q: "第28問", difficulty: "hard", choices: ["『天元突破グレンラガン』で、主人公シモンの相棒であるカミナの武器は？", "A.日本刀", "B.拳銃", "C.ハンマー", "D.ドリル"], ans: "A"},
+{q: "第29問", difficulty: "normal", choices: ["『クレヨンしんちゃん』の野原しんのすけの父、ひろしの会社での役職は？", "A.部長", "B.課長", "C.係長", "D.係長代理"], ans: "C"},
+{q: "第30問", difficulty: "easy", choices: ["『サザエさん』の磯野家で、一番年上なのは？", "A.波平", "B.フネ", "C.サザエ", "D.カツオ"], ans: "A"},
+{q: "第31問", difficulty: "veryhard", choices: ["『星界の紋章』に登場するアーヴ帝国語を作った言語学者は？", "A.森岡浩之（設定）", "B.河野六郎", "C.金田一春彦", "D.言語学教授"], ans: "A"},
+{q: "第32問", difficulty: "hard", choices: ["『あしたのジョー』で、矢吹丈の最大のライバルである力石徹の階級は？", "A.バンタム級", "B.フェザー級", "C.ライト級", "D.ウェルター級"], ans: "A"},
+{q: "第33問", difficulty: "normal", choices: ["『るろうに剣心』の主人公、緋村剣心の頬にある傷の形は？", "A.丸", "B.×（十字）", "C.一本線", "D.三日月"], ans: "B"},
+{q: "第34問", difficulty: "easy", choices: ["『新世紀エヴァンゲリオン』で、主人公・碇シンジが乗る機体は？", "A.エヴァンゲリオン初号機", "B.エヴァンゲリオン零号機", "C.エヴァンゲリオン弐号機", "D.エヴァンゲリオンMark.06"], ans: "A"},
+{q: "第35問", difficulty: "veryhard", choices: ["『王立宇宙軍 オネアミスの翼』の製作会社は？", "A.ガイナックス", "B.サンライズ", "C.東映アニメーション", "D.スタジオジブリ"], ans: "A"},
+{q: "第36問", difficulty: "hard", choices: ["『MONSTER』の悪役であるヨハン・リーベルトの本籍地は？", "A.東ドイツ", "B.西ドイツ", "C.チェコ", "D.オーストリア"], ans: "A"},
+{q: "第37問", difficulty: "normal", choices: ["『ジョジョの奇妙な冒険』の第1部の主人公は？", "A.ジョセフ・ジョースター", "B.空条承太郎", "C.ジョナサン・ジョースター", "D.東方仗助"], ans: "C"},
+{q: "第38問", difficulty: "easy", choices: ["『美少女戦士セーラームーン』で、主人公月野うさぎが変身する決め台詞は？", "A.月に代わっておしおきよ！", "B.月に代わって愛を届けるわ！", "C.月のように輝くわ！", "D.月を見て戦うわ！"], ans: "A"},
+{q: "第39問", difficulty: "veryhard", choices: ["『AKIRA』の原作漫画が連載されていた雑誌は？", "A.週刊ヤングマガジン", "B.週刊少年ジャンプ", "C.週刊少年サンデー", "D.月刊アフタヌーン"], ans: "A"},
+{q: "第40問", difficulty: "hard", choices: ["『宝石の国』で、主人公フォスフォフィライトの硬度は？", "A.3.5", "B.5.5", "C.7", "D.10"], ans: "A"},
+{q: "第41問", difficulty: "normal", choices: ["『黒子のバスケ』で、黒子テツヤの元相棒は？", "A.火神大我", "B.青峰大輝", "C.黄瀬涼太", "D.緑間真太郎"], ans: "B"},
+{q: "第42問", difficulty: "easy", choices: ["『ドラゴンボール』の主人公、孫悟空が最初に修行した武道家は？", "A.亀仙人", "B.界王様", "C.神様", "D.ウイス"], ans: "A"},
+{q: "第43問", difficulty: "veryhard", choices: ["『ルパン三世』の第1シリーズ（緑ジャケット）の演出に関わった人物は？", "A.大塚康生", "B.宮崎駿", "C.高畑勲", "D.すべて正解"], ans: "D"},
+{q: "第44問", difficulty: "hard", choices: ["『カウボーイビバップ』の主人公、スパイク・スピーゲルがかつて所属していた組織は？", "A.レッドドラゴン", "B.ホワイトスネイク", "C.ブルーローズ", "D.ブラックフェザー"], ans: "A"},
+{q: "第45問", difficulty: "normal", choices: ["『HUNTER×HUNTER』の主人公ゴンの目的は？", "A.金持ちになること", "B.ハンターになること", "C.父親ジンに会うこと", "D.幻影旅団を倒すこと"], ans: "C"},
+{q: "第46問", difficulty: "easy", choices: ["『進撃の巨人』の舞台である、人類が居住する壁の名前は？", "A.三重の壁", "B.ウォール・マリア、ローゼ、シーナ", "C.大きな壁", "D.防衛壁"], ans: "B"},
+{q: "第47問", difficulty: "veryhard", choices: ["『伝説巨神イデオン』の劇中で登場する、全滅の引き金となるエネルギーは？", "A.イデ", "B.フォース", "C.ゲッター線", "D.アトミカ"], ans: "A"},
+{q: "第48問", difficulty: "hard", choices: ["『少女革命ウテナ』で、ウテナが所属する学園の名称は？", "A.鳳学園", "B.星ノ森学園", "C.聖マリア学園", "D.常盤台中学"], ans: "A"},
+{q: "第49問", difficulty: "normal", choices: ["『PSYCHO-PASS サイコパス』で、犯罪係数を測定する銃の名前は？", "A.ドミネーター", "B.エリミネーター", "C.サイコガン", "D.ビームサーベル"], ans: "A"},
+{q: "第50問", difficulty: "hard", choices: ["『serial experiments lain』の主人公、玲音が最初に使用していたコンピューターは？", "A.iMac", "B.VAIO", "C.NAVI", "D.PC-98"], ans: "C"}
 ];
 [endscript]
-[jump target="*initialize_game"]
+
 
 ; --- 3. 初期化処理 ---
+
+
 *initialize_game
+
 [iscript]
 if(tf.diff == null) tf.diff = "easy";
-
 tf.filtered = tf.all_questions.filter(function(q) {
-    var level = q.difficulty || "easy";
-    if(tf.diff == "easy") return level == "easy";
-    if(tf.diff == "normal") return level == "easy" || level == "normal";
-    return true; 
+var level = q.difficulty || "easy";
+if(tf.diff == "easy") return level == "easy";
+if(tf.diff == "normal") return (level == "easy" || level == "normal");
+if(tf.diff == "hard") return (level == "easy" || level == "normal" || level == "hard");
+return true; // veryhardは全て含める
 });
-
 // 問題のシャッフル
 for (var i = tf.filtered.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var temp = tf.filtered[i];
-    tf.filtered[i] = tf.filtered[j];
-    tf.filtered[j] = temp;
+var j = Math.floor(Math.random() * (i + 1));
+var temp = tf.filtered[i];
+tf.filtered[i] = tf.filtered[j];
+tf.filtered[j] = temp;
 }
-
-// 10問を抽出して変数をリセット
 tf.selected_questions = tf.filtered.slice(0, 10);
 tf.current_index = 0;
 tf.score = 0;
 tf.life = 3;
 tf.hint_count = 3;
 tf.heart_text = "♡♡♡";
-tf.hint_text = "残り回数：3回";
 [endscript]
 
-; ▼ 難易度ごとの演出分岐 ▼
+
+; ▼ 難易度ごとの背景・BGM分岐 ▼
+
+
 [if exp="tf.diff == 'easy'"]
-    [bg storage="haikei/easy_haikei.png" time="1000"]
-    [playbgm storage="easy_bgm.ogg"]
 
+[bg  storage="haikei/easy_haikei.png"  time="1000"  ]
+[playbgm  storage="easy_bgm.ogg"  ]
 [elsif exp="tf.diff == 'normal'"]
-    [bg storage="haikei/normal_haikei.png" time="1000"]
-    [playbgm storage="normal_bgm.ogg"]
 
+[bg  storage="haikei/normal_haikei.png"  time="1000"  ]
+[playbgm  storage="normal_bgm.ogg"  ]
 [elsif exp="tf.diff == 'hard'"]
-    [bg storage="haikei/hard_haikei.png" time="1000"]
-    [playbgm storage="hard_bgm.ogg"]
+
+[bg  storage="haikei/hard_haikei.png"  time="1000"  ]
+[playbgm  storage="hard_bgm.ogg"  ]
+[else]
+
+[bg  storage="haikei/hard_haikei.png"  time="1000"  ]
+[playbgm  storage="hard_bgm.ogg"  ]
 [endif]
 
-[jump target="*question_loop"]
+
+; --- ★追加：ウェルカム演出 ---
+
+
+*welcome_scene
+
+[iscript]
+// 選ばれた難易度（tf.diff）を日本語表示用のテキストに変換
+if(tf.diff == "easy") { tf.diff_name = "イージー"; }
+else if(tf.diff == "normal") { tf.diff_name = "ノーマル"; }
+else if(tf.diff == "hard") { tf.diff_name = "ハード"; }
+else if(tf.diff == "veryhard") { tf.diff_name = "ベリーハード"; }
+// キャラクター画像のパス
+// （※昨日の表情差分を使う場合は "zunda/zunda_normal.png" 等に書き換えてください）
+f.chara_img = "chara/" + sf.selected_chara + ".png";
+// ボイスのパスを定義（フォルダは data/sound/ 内を想定）
+// 1行目は難易度に合わせて読み上げるため、ファイル名も難易度ごとに読み分けます
+f.voice1 = "voice/" + sf.selected_chara + "/welcome1_" + tf.diff + ".ogg";
+f.voice2 = "voice/" + sf.selected_chara + "/welcome2.ogg";
+f.voice3 = "voice/" + sf.selected_chara + "/welcome3.ogg";
+[endscript]
+
+
+; キャラを中央に表示
+
+
+[image storage="&f.chara_img" layer="1" x="440" y="100" width="400" name="chara_stand"]
+
+[tb_show_message_window  ]
+
+; 1行目のセリフとボイス
+
+
+[playse  storage="&f.voice1"  ]
+
+ようこそ！クイズで遊ぼう！の[p]
+
+
+[emb exp="tf.diff_name"]
+
+
+の世界へ！[p]
+; 2行目のセリフとボイス
+
+
+[playse  storage="&f.voice2"  ]
+
+クイズはランダムで10問を出題するので選択肢の中から選んでね！[p]
+; 3行目のセリフとボイス
+
+
+[playse  storage="&f.voice3"  ]
+
+では、クイズを始めるよ！[p]
+
+
+[tb_hide_message_window  ]
+
+; ★変更：キャラを右（x="800"）へ1秒（1000ミリ秒）かけてスーッとスライドさせる！
+
+
+[anim  name="chara_stand"  left="800"  time="1000"  ]
+[wa  ]
+
+ ; スライド移動が完全に終わるまで待つ[p]
+; スライドを見届けたら、システムを安定させるために一旦お掃除
+; （※次のクイズループですぐ同じ場所に再配置されるので、プレイヤーの目には消えたように見えません！）
+
+
+[freeimage layer="1"]
+
 
 ; --- 4. クイズループ ---
+
+
 *question_loop
-; ▼ 安全装置：問題が尽きた、または10問終わった場合は結果発表へ飛ぶ ▼
-[if exp="tf.current_index >= tf.selected_questions.length || tf.current_index >= 10"]
-    [jump target="*quiz_end"]
+
+[if exp="tf.current_index >= 10"]
+
+[jump  target="*quiz_end"  storage=""  ]
 [endif]
 
 [iscript]
 var q = tf.selected_questions[tf.current_index];
 var choices = [q.choices[1], q.choices[2], q.choices[3], q.choices[4]];
 for (var k = choices.length - 1; k > 0; k--) {
-    var m = Math.floor(Math.random() * (k + 1));
-    var tmp = choices[k];
-    choices[k] = choices[m];
-    choices[m] = tmp;
+var m = Math.floor(Math.random() * (k + 1));
+var tmp = choices[k];
+choices[k] = choices[m];
+choices[m] = tmp;
 }
 tf.shuffled = choices;
 var ans_idx = "ABCD".indexOf(q.ans) + 1;
@@ -135,100 +235,149 @@ tf.correct_text = q.choices[ans_idx];
 tf.hint_used = false;
 [endscript]
 
-[cm]
-[tb_show_message_window]
+[cm  ]
+
+; ★追加：クイズ中はキャラを右側に表示
+
+
+[image storage="&f.chara_img" layer="1" x="800" y="50" width="400" name="chara_stand"]
+
+[tb_show_message_window  ]
+
+第 [p]
+
+
+[emb exp="tf.current_index+1"]
+
+
+ 問：[p]
+
+
 [emb exp="tf.selected_questions[tf.current_index].choices[0]"]
+
 [p]
 
 *show_choices
-[cm]
-[tb_hide_message_window]
 
-[if exp="tf.shuffled[0] != ''"]
-    [glink color="black" target="*check_answer" text="&tf.shuffled[0]" size="20" x="250" y="250" width="350" exp="tf.user_choice=tf.shuffled[0]"]
-[endif]
-
-[if exp="tf.shuffled[1] != ''"]
-    [glink color="black" target="*check_answer" text="&tf.shuffled[1]" size="20" x="680" y="250" width="350" exp="tf.user_choice=tf.shuffled[1]"]
-[endif]
-
-[if exp="tf.shuffled[2] != ''"]
-    [glink color="black" target="*check_answer" text="&tf.shuffled[2]" size="20" x="250" y="350" width="350" exp="tf.user_choice=tf.shuffled[2]"]
-[endif]
-
-[if exp="tf.shuffled[3] != ''"]
-    [glink color="black" target="*check_answer" text="&tf.shuffled[3]" size="20" x="680" y="350" width="350" exp="tf.user_choice=tf.shuffled[3]"]
-[endif]
-
+[cm  ]
+[tb_hide_message_window  ]
+[glink  color="black"  target="*check_answer"  text="&tf.shuffled[0]"  size="20"  x="250"  y="250"  width="350"  exp="tf.user_choice=tf.shuffled[0]"  ]
+[glink  color="black"  target="*check_answer"  text="&tf.shuffled[1]"  size="20"  x="680"  y="250"  width="350"  exp="tf.user_choice=tf.shuffled[1]"  ]
+[glink  color="black"  target="*check_answer"  text="&tf.shuffled[2]"  size="20"  x="250"  y="350"  width="350"  exp="tf.user_choice=tf.shuffled[2]"  ]
+[glink  color="black"  target="*check_answer"  text="&tf.shuffled[3]"  size="20"  x="680"  y="350"  width="350"  exp="tf.user_choice=tf.shuffled[3]"  ]
 [if exp="tf.hint_used == false && tf.hint_count > 0"]
-    [glink color="blue" target="*use_hint" text="ヒントを使う" size="20" x="980" y="65" width="160"]
-[endif]
-[s]
 
+[glink  color="blue"  target="*use_hint"  text="ヒントを使う"  size="20"  x="980"  y="65"  width="160"  ]
+[endif]
+
+[s  ]
 *use_hint
+
 [iscript]
 var wrong_indices = [];
 for(var i=0; i<4; i++){
-    if(tf.shuffled[i] != tf.correct_text){
-        wrong_indices.push(i);
-    }
+if(tf.shuffled[i] != tf.correct_text){ wrong_indices.push(i); }
 }
 tf.shuffled[wrong_indices[0]] = "";
 tf.shuffled[wrong_indices[1]] = "";
 tf.hint_used = true;
-tf.hint_count = tf.hint_count - 1;
-tf.hint_text = "残り回数：" + tf.hint_count + "回";
+tf.hint_count--;
 [endscript]
-[jump target="*show_choices"]
 
+[jump  target="*show_choices"  storage=""  ]
 
 ; --- 5. 判定・終了 ---
-*check_answer
-[cm]
-[tb_show_message_window]
-[if exp="tf.user_choice == tf.correct_text"]
-    [iscript]
-    tf.score = tf.score + 1;
-    [endscript]
-    正解！！[p]
-[else]
-    [iscript]
-    tf.life = tf.life - 1;
-    if(tf.life < 0) tf.life = 0;
-    tf.heart_text = "♡".repeat(tf.life);
-    [endscript]
-    
-    ; ▼ UI更新：減ったハートを画面に反映させる ▼
-    [free name="heart_ui" layer="1"]
-    [ptext layer="1" page="fore" text="&tf.heart_text" size="30" x="50" y="55" color="0xFF6699" name="heart_ui"]
 
-    残念、不正解…正解は「[emb exp="tf.correct_text"]」でした。[p]
+
+*check_answer
+
+[cm  ]
+[tb_show_message_window  ]
+[if exp="tf.user_choice == tf.correct_text"]
+
+[iscript]
+tf.score++;[endscript]
+正解！！[p]
+[else]
+[iscript]
+tf.life--;
+if(tf.life < 0) tf.life = 0;
+tf.heart_text = "♡".repeat(tf.life);
+[endscript]
+
+
+残念、不正解…正解は「[p]
+
+
+[emb exp="tf.correct_text"]
+
+
+」でした。[p]
+
+
 [endif]
 
 [if exp="tf.life <= 0"]
-    [jump target="*game_over"]
+
+[jump  target="*game_over"  storage=""  ]
 [endif]
 
+
+; 画面のキャラを消去して次の問題へ
+
+
+[freeimage layer="1"]
+
 [iscript]
-tf.current_index = tf.current_index + 1;
-[endscript]
+tf.current_index++;[endscript]
 [jump target="*question_loop"]
 
-*game_over
 [cm]
-; ▼ 終了時にUIを綺麗に消す ▼
-[free name="heart_ui" layer="1"]
-[free name="life_title" layer="1"]
-[free name="hint_ui" layer="1"]
 [tb_show_message_window]
 ゲームオーバー…！[p]
-[s]
+[jump target="*quiz_end"]
 
-*quiz_end
 [cm]
-[free name="heart_ui" layer="1"]
-[free name="life_title" layer="1"]
-[free name="hint_ui" layer="1"]
 [tb_show_message_window]
 貴方は10点中 [emb exp="tf.score"] 点です！[p]
 [s]
+[endscript]
+
+
+tf.current_index++;[endscript][p]
+[jump target="*question_loop"][p]
+
+
+*game_over
+
+
+[cm][p]
+[tb_show_message_window][p]
+ゲームオーバー…！[p][p]
+[jump target="*quiz_end"][p]
+
+
+*quiz_end
+
+
+[cm][p]
+[tb_show_message_window][p]
+貴方は10点中 [emb exp="tf.score"] 点です！[p][p]
+[s][p]
+
+
+
+[tb_show_message_window][p]
+貴方は10点中 [emb exp="tf.score"] 点です！[p][p]
+[s][p]
+
+
+
+貴方は10点中 [emb exp="tf.score"] 点です！[p][p]
+[s][p]
+
+
+
+[s][p]
+
+
