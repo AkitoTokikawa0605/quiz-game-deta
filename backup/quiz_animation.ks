@@ -14,6 +14,8 @@
 
 [freeimage layer="1"]
 
+[freeimage layer="2"]
+
 [bg  storage="haikei/sky.png"  time="800"  ]
 [image layer="2" page="fore" storage="UI/level_haikei.png" x="350" y="35" width="550" height="150" reflect="false"]
 
@@ -113,15 +115,19 @@ tf.score = 0;
 // ★背景指定もライフもすべてここでまとめて処理
 if(tf.diff == "easy"){
 tf.max_life = 5;
+tf.time_limit = 60;
 tf.current_bg = 'haikei/easy_haikei.png';
 } else if(tf.diff == "normal"){
 tf.max_life = 3;
+tf.time_limit = 60;
 tf.current_bg = 'haikei/normal_haikei.png';
 } else if(tf.diff == "hard"){
 tf.max_life = 2;
+tf.time_limit = 60;
 tf.current_bg = 'haikei/hard_haikei.png';
 } else if(tf.diff == "veryhard"){
 tf.max_life = 1;
+tf.time_limit = 60;
 tf.current_bg = 'haikei/very_hard_haikei.png';
 }
 tf.life = tf.max_life;
@@ -221,10 +227,29 @@ f.voice3 = "voice/" + sf.selected_chara + "/welcome3.ogg";
 *question_loop
 
 
-; ★ [if]を使わず、cond属性（条件）を満たした時だけ終了ラベルへジャンプさせる
+; ▼▼ 10問終わったかの判定を確実に行う ▼▼
 
 
-[jump  target="*quiz_end"  cond="tf.current_index&nbsp;>=&nbsp;tf.question_count"  storage=""  ]
+[iscript]
+if(tf.current_index >= tf.question_count){
+tf.loop_next = "*quiz_end";
+} else {
+tf.loop_next = "*continue_quiz";
+}
+[endscript]
+
+[jump  target="&tf.loop_next"  storage=""  ]
+*continue_quiz
+
+
+; ▼▼ タイマーの開始処理をここから消し、初期化だけにします ▼▼
+
+
+[iscript]
+tf.time_limit = 60;
+tf.time_left = tf.time_limit;
+[endscript]
+
 [call  target="*show_life"  storage=""  ]
 [iscript]
 var q = tf.selected_questions[tf.current_index];
@@ -246,6 +271,20 @@ tf.hint_used = false;
 
 [tb_show_message_window  ]
 
+; --- タイマー表示 ---
+
+
+[image layer="2" storage="UI/bar_hk.png" x="410" y="70" name="time_bar_hk" width="470" height="70"]
+
+[image layer="2" storage="UI/gage.png" x="410" y="70" name="time_gage" width="470" height="70"]
+
+
+; ▼▼ time_cover にも name を追加しています ▼▼
+
+
+[image layer="2" storage="UI/time_cover.png" x="320" y="15" name="time_cover" width="600" height="150"]
+
+
 第 [p]
 
 
@@ -259,19 +298,50 @@ tf.hint_used = false;
 
 [p]
 
+
+; ▼▼ タイマー＆バー連動開始（ヒントを押してもリセットされない位置に配置） ▼▼
+
+
+[iscript]
+tf.timer_id = setInterval(function(){
+tf.time_left--;
+if(tf.time_left <= 0){
+clearInterval(tf.timer_id);
+TYRANO.kag.ftag.startTag("jump", {target:"*time_up"});
+}
+}, 1000);
+// アニメーション用に秒数をミリ秒（60秒なら60000）に変換
+tf.anim_time = (tf.time_limit + 18) * 1000;
+[endscript]
+
+
+; ▼▼ ゲージを時間いっぱいかけて幅0まで縮めるアニメーション ▼▼
+
+
+[anim  name="time_gage"  width="0"  time="&tf.anim_time"  ]
 *show_choices
 
 [cm  ]
 [tb_hide_message_window  ]
-[glink  color="black"  target="*check_answer"  text="&tf.shuffled[0]"  size="20"  x="250"  y="250"  width="350"  exp="tf.user_choice=tf.shuffled[0]"  ]
-[glink  color="black"  target="*check_answer"  text="&tf.shuffled[1]"  size="20"  x="680"  y="250"  width="350"  exp="tf.user_choice=tf.shuffled[1]"  ]
-[glink  color="black"  target="*check_answer"  text="&tf.shuffled[2]"  size="20"  x="250"  y="350"  width="350"  exp="tf.user_choice=tf.shuffled[2]"  ]
-[glink  color="black"  target="*check_answer"  text="&tf.shuffled[3]"  size="20"  x="680"  y="350"  width="350"  exp="tf.user_choice=tf.shuffled[3]"  ]
+[glink  color="black"  target="*check_answer"  text="&tf.shuffled[0]"  size="20"  x="250"  y="250"  width="350"  exp="tf.choice_num=0"  ]
+[glink  color="black"  target="*check_answer"  text="&tf.shuffled[1]"  size="20"  x="680"  y="250"  width="350"  exp="tf.choice_num=1"  ]
+[glink  color="black"  target="*check_answer"  text="&tf.shuffled[2]"  size="20"  x="250"  y="350"  width="350"  exp="tf.choice_num=2"  ]
+[glink  color="black"  target="*check_answer"  text="&tf.shuffled[3]"  size="20"  x="680"  y="350"  width="350"  exp="tf.choice_num=3"  ]
 
-; ★ ヒントボタンもifを使わず、条件を満たさない場合は[jump]でボタン表示をスキップする
+; ▼▼ ヒントボタンの条件判定 ▼▼
 
 
-[jump  target="*skip_hint"  cond="tf.hint_used&nbsp;==&nbsp;true&nbsp;||&nbsp;tf.hint_count&nbsp;<=&nbsp;0"  storage=""  ]
+[iscript]
+if(tf.hint_used == true || tf.hint_count <= 0){
+tf.hint_jump = "*skip_hint";
+} else {
+tf.hint_jump = "*show_hint_button";
+}
+[endscript]
+
+[jump  target="&tf.hint_jump"  storage=""  ]
+*show_hint_button
+
 [glink  color="blue"  target="*use_hint"  text="ヒントを使う"  size="20"  x="980"  y="65"  width="160"  ]
 *skip_hint
 
@@ -303,11 +373,23 @@ tf.hint_count--;
 [cm  ]
 [tb_show_message_window  ]
 
-; ★ if文を使わず、正解・不正解それぞれの専用ラベルへ強制ジャンプ
+; ▼▼ 正解判定 ▼▼
 
 
-[jump  target="*ans_correct"  cond="tf.user_choice&nbsp;==&nbsp;tf.correct_text"  storage=""  ]
-[jump  target="*ans_wrong"  storage=""  ]
+[iscript]
+tf.user_choice = tf.shuffled[tf.choice_num];
+if(tf.user_choice == tf.correct_text){
+tf.ans_target = "*ans_correct";
+} else {
+tf.ans_target = "*ans_wrong";
+}
+[endscript]
+
+[jump  target="&tf.ans_target"  storage=""  ]
+
+; --- 正解処理 ---
+
+
 *ans_correct
 
 [eval exp="tf.score++"]
@@ -317,11 +399,17 @@ tf.hint_count--;
 
 
 [jump  target="*next_question_check"  storage=""  ]
+
+; --- 不正解処理 ---
+
+
 *ans_wrong
 
 [eval exp="tf.life--"]
 
-[eval exp="tf.life = 0" cond="tf.life < 0"]
+[iscript]
+if(tf.life < 0){ tf.life = 0; }
+[endscript]
 
 [call  target="*show_life"  storage=""  ]
 
@@ -338,15 +426,57 @@ tf.hint_count--;
 *next_question_check
 
 
-; ライフが0ならゲームオーバーへ
+; ▼▼ タイマー停止と、ライフ判定 ▼▼
 
 
-[jump  target="*game_over"  cond="tf.life&nbsp;<=&nbsp;0"  storage=""  ]
+[iscript]
+clearInterval(tf.timer_id);
+if(tf.life <= 0){
+tf.next_target = "*game_over";
+} else {
+tf.next_target = "*go_next";
+}
+[endscript]
+
+
+; ▼▼ アニメーションを停止し、古いゲージとカバー画像を綺麗に消去する ▼▼
+
+
+[stopanim name="time_gage"]
+
+[free layer="2" name="time_gage"]
+
+[free layer="2" name="time_cover"]
+
+[jump  target="&tf.next_target"  storage=""  ]
+*go_next
+
 [freeimage layer="1"]
 
 [eval exp="tf.current_index++"]
 
 [jump  target="*question_loop"  storage=""  ]
+
+; --- 時間切れ処理 ---
+
+
+*time_up
+
+[cm  ]
+[tb_show_message_window  ]
+
+時間切れ！[p]
+残念、不正解…正解を確認して次の問題へ進もう！[p]
+
+
+[eval exp="tf.life--"]
+
+[call  target="*show_life"  storage=""  ]
+[jump  target="*next_question_check"  storage=""  ]
+
+; --- ゲームオーバー処理 ---
+
+
 *game_over
 
 [cm  ]
