@@ -185,11 +185,14 @@ if(tf.diff == "easy") { tf.diff_name = "イージー"; }
 else if(tf.diff == "normal") { tf.diff_name = "ノーマル"; }
 else if(tf.diff == "hard") { tf.diff_name = "ハード"; }
 else if(tf.diff == "veryhard") { tf.diff_name = "ベリーハード"; }
-f.chara_img = "chara/" + sf.selected_chara + ".png";
+f.chara_img = "zunda/" + sf.selected_chara + "_normal.png";
 f.voice1 = "voice/" + sf.selected_chara + "/welcome1_" + tf.diff + ".ogg";
 f.voice2 = "voice/" + sf.selected_chara + "/welcome2.ogg";
 f.voice3 = "voice/" + sf.selected_chara + "/welcome3.ogg";
 [endscript]
+
+; ▼▼ 追加：レイヤー1を表示状態にする ▼▼
+[layopt layer="1" visible="true"]
 
 [image storage="&f.chara_img" layer="1" x="440" y="100" width="400" name="chara_stand"]
 
@@ -392,6 +395,15 @@ tf.ans_target = "*ans_wrong";
 
 *ans_correct
 
+
+; ▼▼ 追加：タイマーとゲージのアニメーションをストップ ▼▼
+
+
+[iscript]
+clearInterval(tf.timer_id); // 裏のカウントダウンを止める
+$(".time_gage").stop();     // ゲージが縮む動きを止める
+[endscript]
+
 [eval exp="tf.score++"]
 
 
@@ -404,6 +416,15 @@ tf.ans_target = "*ans_wrong";
 
 
 *ans_wrong
+
+
+; ▼▼ 追加：タイマーとゲージのアニメーションをストップ ▼▼
+
+
+[iscript]
+clearInterval(tf.timer_id); // 裏のカウントダウンを止める
+$(".time_gage").stop();     // ゲージが縮む動きを止める
+[endscript]
 
 [eval exp="tf.life--"]
 
@@ -479,6 +500,14 @@ tf.next_target = "*go_next";
 
 *game_over
 
+
+; ① タイムバー（画像）を消す処理を追加
+
+
+[free name="time_bar_hk" layer="2"]
+
+[free name="life_heart" layer="2"]
+
 [cm  ]
 [tb_show_message_window  ]
 
@@ -498,6 +527,12 @@ tf.next_target = "*go_next";
 
 
 点です！[p]
+; メッセージウィンドウを一旦非表示にする（タイトル画面で不要な場合）
 
 
-[s  ]
+[tb_hide_message_window  ]
+
+; ② タイトル画面に戻る処理を追加（[s]を置き換え）
+
+
+[jump  storage="title_screen.ks"  target="*game_end"  ]
