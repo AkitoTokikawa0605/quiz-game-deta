@@ -2,181 +2,118 @@
 
 *start
 
-
 ; スライダープラグインを読み込む
-
-
 [plugin name="uiparts_set"]
 
 [cm  ]
 [clearfix]
 
 [freeimage layer="1"]
-
 [freeimage layer="2"]
-
 [hidemenubutton]
 
-
 ; レイヤー1とレイヤー2を表示状態にする
-
-
 [layopt layer="1" visible="true"]
-
 [layopt layer="2" visible="true"]
 
 
 ; 変数の初期値設定
-
-
 [iscript]
 if(sf.bgm_vol == undefined){ sf.bgm_vol = 50; }
 if(sf.se_vol == undefined){ sf.se_vol = 50; }
 if(sf.voice_vol == undefined){ sf.voice_vol = 50; }
 [endscript]
 
-
 ; 背景を表示
-
-
 [bg  storage="haikei/option_haikei.png"  time="500"  ]
 
 ; オプション専用BGM
-
-
 [playbgm  storage="bgm1.ogg"  loop="true"  ]
 
 ; タイトル
-
-
 [image layer="2" page="fore" storage="UI/option.png" x="500" y="85" width="310" height="100" reflect="false"]
-
 
 ; ========================================
 ; BGM音量
 ; ========================================
-
-
 [image layer="2" page="fore" storage="UI/bgm.png" x="190" y="210" width="180" height="45" reflect="false"]
 
-
 ; BGM音量スライダー
-
-
 [slider name="bgm_slider" x="195" y="270" width="600" height="18" min="0" max="100" var="sf.bgm_vol" target="*change_bgm" base_color="#DDF2FC" active_color="#95D2F4" border="2" border_color="black" border_radius="30"]
 
-
 ; BGM音量表示パネル
-
-
 [image layer="2" page="fore" storage="UI/mini.png" x="815" y="255" width="150" height="50" reflect="false"]
-
 [image layer="2" page="fore" storage="UI/spk.png" x="825" y="255" width="70" height="60" reflect="false"]
-
 [ptext name="bgm_value" layer="2" page="fore" text="&sf.bgm_vol" x="900" y="260" size="24" color="white" align="center" overwrite="true"]
-
 
 ; ========================================
 ; SE音量
 ; ========================================
 
-
 [image layer="2" page="fore" storage="UI/se.png" x="190" y="350" width="180" height="45" reflect="false"]
 
 
 ; SEサンプル
-
-
 [button  graphic="button/button2.png"  enterimg="button/button02.png"  x="635"  y="345"  width="160"  height="54"  target="*test_se"  storage="scene1.ks"  fix="true"  ]
 
 ; SE音量スライダー
-
-
 [slider name="se_slider" x="195" y="410" width="600" height="18" min="0" max="100" var="sf.se_vol" target="*change_se" base_color="#E2F5E1" active_color="#A8E4A6" border="2" border_color="black" border_radius="30"]
 
-
 ; SE音量表示パネル
-
-
 [image layer="2" page="fore" storage="UI/mini.png" x="815" y="395" width="150" height="50" reflect="false"]
-
 [image layer="2" page="fore" storage="UI/spk.png" x="825" y="395" width="70" height="60" reflect="false"]
-
 [ptext name="se_value" layer="2" page="fore" text="&sf.se_vol" x="900" y="400" size="24" color="white" align="center" overwrite="true"]
-
 
 ; ========================================
 ; ボイス音量
 ; ========================================
-
-
 [image layer="2" page="fore" storage="UI/voice.png" x="190" y="490" width="180" height="45" reflect="false"]
 
-
 ; ボイスサンプル
-
-
 [button  graphic="button/button2.png"  enterimg="button/button02.png"  x="635"  y="485"  width="160"  height="54"  target="*test_voice"  storage="scene1.ks"  fix="true"  ]
 
 ; ボイス音量スライダー
-
-
 [slider name="voice_slider" x="195" y="550" width="600" height="18" min="0" max="100" var="sf.voice_vol" target="*change_voice" base_color="#FCE7EE" active_color="#F7C2D4" border="2" border_color="black" border_radius="30"]
 
 
 ; ボイス音量表示パネル
-
-
 [image layer="2" page="fore" storage="UI/mini.png" x="815" y="535" width="150" height="50" reflect="false"]
-
 [image layer="2" page="fore" storage="UI/spk.png" x="825" y="535" width="70" height="60" reflect="false"]
-
 [ptext name="voice_value" layer="2" page="fore" text="&sf.voice_vol" x="900" y="540" size="24" color="white" align="center" overwrite="true"]
 
-
 ; 戻るボタン（通常時とホバー時を指定）
-
-
 [button  graphic="button/button17.png"  enterimg="button/button17_1.png"  x="1000"  y="585"  target="*back_to_title"  storage=""  ]
+
 [s  ]
 
 ; --- 処理部 ---
 
-
 *change_bgm
 
 [bgmopt volume="&sf.bgm_vol"]
-
 [ptext name="bgm_value" layer="2" page="fore" text="&sf.bgm_vol" x="900" y="260" size="24" color="white" align="center" overwrite="true"]
-
 [return  ]
+
 *change_se
 
 [seopt volume="&sf.se_vol"]
-
 [ptext name="se_value" layer="2" page="fore" text="&sf.se_vol" x="900" y="400" size="24" color="white" align="center" overwrite="true"]
-
 [return  ]
+
 *change_voice
 
 [seopt buf="2" volume="&sf.voice_vol"]
-
 [ptext name="voice_value" layer="2" page="fore" text="&sf.voice_vol" x="900" y="540" size="24" color="white" align="center" overwrite="true"]
-
 [return  ]
 
 ; --- タイトルへ戻る ---
-
 
 *back_to_title
 
 [cm  ]
 [clearfix]
-
 [freeimage layer="1"]
-
 [freeimage layer="2"]
-
 [jump  storage="title_screen.ks"  target="*show_menu"  ]
 
 ```[p]
