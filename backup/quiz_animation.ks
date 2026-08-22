@@ -199,37 +199,42 @@ tf.current_index = 0;
 tf.score = 0;
 // 設定値初期化
 if(tf.diff == "easy"){
-tf.max_life = 5;
-tf.time_limit = 60;
-tf.hint_count = 5;
-tf.current_bg = 'haikei/easy_haikei.png';
+    tf.max_life = 5;
+    tf.time_limit = 60;
+    tf.hint_count = 5;
+    tf.current_bg = 'haikei/easy_haikei.png';
+    tf.current_bgm = 'anime_easy.ogg'; // ★末尾にセミコロン追加
 } else if(tf.diff == "normal"){
-tf.max_life = 3;
-tf.time_limit = 60;
-tf.hint_count = 3;
-tf.current_bg = 'haikei/normal_haikei.png';
+    tf.max_life = 3;
+    tf.time_limit = 60;
+    tf.hint_count = 3;
+    tf.current_bg = 'haikei/normal_haikei.png';
+    tf.current_bgm = 'anime_normal.ogg'; // ★末尾にセミコロン追加
 } else if(tf.diff == "hard"){
-tf.max_life = 2;
-tf.time_limit = 60;
-tf.hint_count = 1;
-tf.current_bg = 'haikei/hard_haikei.png';
+    tf.max_life = 2;
+    tf.time_limit = 60;
+    tf.hint_count = 1;
+    tf.current_bg = 'haikei/hard_haikei.png';
+    tf.current_bgm = 'anime_hard.ogg'; // ★末尾にセミコロン追加
 } else if(tf.diff == "veryhard"){
-tf.max_life = 1;
-tf.time_limit = 60;
-tf.hint_count = 0;
-tf.current_bg = 'haikei/very_hard_haikei.png';
+    tf.max_life = 1;
+    tf.time_limit = 60;
+    tf.hint_count = 0;
+    tf.current_bg = 'haikei/very_hard_haikei.png';
+    tf.current_bgm = 'anime_very_hard.ogg';
 }
 if(tf.debug_mode == true){
-if(tf.debug_bg) tf.current_bg = tf.debug_bg;
-tf.hint_count = 999;
+    if(tf.debug_bg) tf.current_bg = tf.debug_bg;
+    tf.hint_count = 999;
 }
 tf.life = tf.max_life;
 [endscript]
 
-[call  storage="loading_scene.ks"  target="*loading_start"  ]
+[call storage="loading_scene.ks" target="*loading_start"]
 [image layer="base" storage="&tf.current_bg" time="800"]
 
-[playbgm  storage="bgm1.ogg"  ]
+; ★ チュートリアル・開始前のBGMとして鳴らす
+[playbgm storage="bgm1.ogg" loop="true"]
 
 ; 初回判定
 
@@ -347,10 +352,11 @@ f.voice3 = "voice/" + sf.selected_chara + "/welcome3.ogg";
 
 ; --- 5. ライフ表示処理（サブルーチン） ---
 
-
 *show_life
 
 [free layer="2" name="life_heart"]
+
+[image layer="2" name="life_heart" storage="UI/life.png" x="60" y="10" width="250" height="100"]
 
 [iscript]
 tf.h1 = (tf.life >= 1) ? "UI/heart1.png" : "UI/heart01.png";
@@ -360,17 +366,14 @@ tf.h4 = (tf.life >= 4) ? "UI/heart1.png" : "UI/heart01.png";
 tf.h5 = (tf.life >= 5) ? "UI/heart1.png" : "UI/heart01.png";
 [endscript]
 
-[image layer="2" name="life_heart" storage="&tf.h1" x="40" y="40" width="50" height="50" cond="tf.max_life >= 1"]
+; ★ y="40" から y="100"（またはお好みの高さ）に変更！
+[image layer="2" name="life_heart" storage="&tf.h1" x="40" y="100" width="50" height="50" cond="tf.max_life >= 1"]
+[image layer="2" name="life_heart" storage="&tf.h2" x="100" y="100" width="50" height="50" cond="tf.max_life >= 2"]
+[image layer="2" name="life_heart" storage="&tf.h3" x="160" y="100" width="50" height="50" cond="tf.max_life >= 3"]
+[image layer="2" name="life_heart" storage="&tf.h4" x="220" y="100" width="50" height="50" cond="tf.max_life >= 4"]
+[image layer="2" name="life_heart" storage="&tf.h5" x="280" y="100" width="50" height="50" cond="tf.max_life >= 5"]
 
-[image layer="2" name="life_heart" storage="&tf.h2" x="100" y="40" width="50" height="50" cond="tf.max_life >= 2"]
-
-[image layer="2" name="life_heart" storage="&tf.h3" x="160" y="40" width="50" height="50" cond="tf.max_life >= 3"]
-
-[image layer="2" name="life_heart" storage="&tf.h4" x="220" y="40" width="50" height="50" cond="tf.max_life >= 4"]
-
-[image layer="2" name="life_heart" storage="&tf.h5" x="280" y="40" width="50" height="50" cond="tf.max_life >= 5"]
-
-[return  ]
+[return]
 
 ; --- 6. クイズループ ---
 
@@ -389,14 +392,24 @@ tf.loop_next = "*continue_quiz";
 
 *continue_quiz
 
+; --- 前の表示をクリア（重複防止） ---
+[free layer="2" name="q_count_text"]
+
+; ★ 第1問目の開始時だけ、bgm1 を止めて難易度BGMに切り替える
+[if exp="tf.current_index == 0"]
+    [stopbgm]
+    [playbgm storage="&tf.current_bgm" loop="true"]
+[endif]
+
 [iscript]
-// クイズデータと難易度の初期化（※タイマー変数はここではセットだけ行います）
+// クイズデータと難易度の初期化
 tf.time_limit = 60;
 tf.time_left = tf.time_limit;
 tf.anim_time = tf.time_limit * 1250;
 
 var q = tf.selected_questions[tf.current_index];
 tf.q_title = "第" + (tf.current_index + 1) + "問：";
+tf.q_count_str = "第" + (tf.current_index + 1) + "問"; // ★「：」なし
 tf.q_text = q.choices[0];
 
 function removePrefix(text) {
@@ -424,16 +437,30 @@ tf.show3 = true;
 tf.hint_used = false;
 [endscript]
 
+; ★★★ 1. まず「第〇問」のテキストを画面に出す（tf.q_count_str を使用） ★★★
+[ptext layer="2" name="q_count_text" text="&tf.q_count_str" x="1030" y="25" size="36" color="0xFFFFFF" align="center"]
+
+; ★★★ 2. 出したテキストに対して黒背景・角丸CSSをかける ★★★
+[iscript]
+$(".q_count_text").css({
+    "background-color": "rgba(0, 0, 0, 0.55)",
+    "padding": "6px 20px",
+    "border-radius": "12px",
+    "letter-spacing": "2px"
+});
+[endscript]
+
 ; 2. 画面レイアウトと問題タイトルの表示
 [call target="*show_life" storage=""]
 [cm]
 [layopt layer="1" visible="true"]
 [image storage="&f.chara_img" layer="1" x="900" y="100" width="400" name="chara_stand"]
 
-
 [image layer="2" storage="UI/bar_hk.png" x="410" y="70" name="time_bar_hk" width="470" height="70"]
 [image layer="2" storage="UI/gage.png" x="425" y="70" name="time_gage" width="450" height="70"]
 [image layer="2" storage="UI/time_cover.png" x="320" y="15" name="time_cover" width="600" height="150"]
+
+[playse storage="se/mondai.ogg"]
 
 [tb_show_message_window]
 [emb exp="tf.q_title"]
@@ -453,7 +480,6 @@ $(".question_text").css({
 
 [tb_hide_message_window]
 
-
 [iscript]
 // 基準点の設定
 $(".time_gage").css({
@@ -466,31 +492,42 @@ $(".time_gage").css({
 ; ★ 3. タイマー＆ゲージアニメーションスタート
 [iscript]
 if(tf.timer_id) clearInterval(tf.timer_id);
-tf.time_left = tf.time_limit || 60;
+tf.time_left = tf.time_limit;
+tf.se_phase = 1; // SE状態管理用
 
-tf.timer_id = setInterval(function(){
-    tf.time_left--;
-    
-    if(tf.time_left <= 1){
-        $(".time_gage").css("opacity", "0");
-    }
+// ★ 最初（60秒〜16秒）は loop="true" で流しっぱなしにする
+TYRANO.kag.ftag.startTag("stopse", {});
+TYRANO.kag.ftag.startTag("playse", { storage: "se/timer1.ogg", loop: "true" });
 
-    if (tf.time_left > 10 && tf.time_left > 0) {
-        TYRANO.kag.ftag.startTag("playse", { storage: "timer1.ogg", stop: true });
-    } else if (tf.time_left <= 10 && tf.time_left > 0) {
-        TYRANO.kag.ftag.startTag("playse", { storage: "timer2.ogg", stop: true });
-    }
-
-    if(tf.time_left <= 0){
-        clearInterval(tf.timer_id);
-        $(".time_gage").stop(true, false).hide();
-        TYRANO.kag.ftag.startTag("playse", { storage: "time_up.ogg" });
+if(tf.debug_mode !== true){
+    tf.timer_id = setInterval(function(){
+        tf.time_left--;
         
-        TYRANO.kag.stat.is_strong_stop = false;
-        TYRANO.kag.layer.showEventLayer();
-        TYRANO.kag.ftag.startTag("jump", { target: "*time_up" });
-    }
-}, 1000);
+        if(tf.time_left <= 1){
+            $(".time_gage").css("opacity", "0");
+        }
+
+        // ★ 残り15秒になった瞬間「1回だけ」焦りSEのループへ差し替える
+        if (tf.time_left <= 15 && tf.time_left > 0 && tf.se_phase === 1) {
+            tf.se_phase = 2;
+            TYRANO.kag.ftag.startTag("stopse", {});
+            TYRANO.kag.ftag.startTag("playse", { storage: "se/timer2.ogg", loop: "true" });
+        }
+
+        // ★ タイムアップ時にSEを止める
+        if(tf.time_left <= 0){
+            clearInterval(tf.timer_id);
+            $(".time_gage").stop(true, false).hide();
+            
+            TYRANO.kag.ftag.startTag("stopse", {});
+            TYRANO.kag.ftag.startTag("playse", { storage: "se/time_up.ogg" });
+            
+            TYRANO.kag.stat.is_strong_stop = false;
+            TYRANO.kag.layer.showEventLayer();
+            TYRANO.kag.ftag.startTag("jump", { target: "*time_up" });
+        }
+    }, 1000);
+}
 [endscript]
 
 ; ゲージアニメーション開始
@@ -584,6 +621,8 @@ if(tf.user_choice == tf.correct_text){
 
 *ans_correct
 
+[stopse]
+[playse storage="se/seikai.ogg"]
 [iscript]
 clearInterval(tf.timer_id);
 $(".time_gage").stop(true, false);
@@ -601,6 +640,8 @@ $(".time_gage").stop(true, false);
 
 *ans_wrong
 
+[stopse]
+[playse storage="se/hazure.ogg"]
 [iscript]
 clearInterval(tf.timer_id);
 $(".time_gage").stop(true, false);
@@ -650,6 +691,7 @@ if(tf.life <= 0){
 
 *time_up
 
+[stopse]
 [cm]
 [tb_show_message_window]
 
