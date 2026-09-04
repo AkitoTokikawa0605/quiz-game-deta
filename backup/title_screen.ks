@@ -219,13 +219,29 @@ sf.skip_menu_bgm = true;
 [endscript]
 
 [jump target="*show_menu" storage=""]
+
 *show_menu
 
 [bg storage="haikei/title_01.png" time="800"]
-[if exp="sf.skip_menu_bgm != true"]
-[playbgm storage="bgm3.ogg" loop="true"]
+
+; ★ パス表記の違い（./data/bgm/等）に対応した判定
+[iscript]
+// 現在再生中のBGMを取得（未定義の場合は空文字）
+var currentBgm = TYRANO.kag.tmp.repeat_bgm || "";
+
+// bgm3.ogg が含まれて『いない』、かつスキップフラグも立っていない時に再生
+tf.need_play_bgm = false;
+
+if (currentBgm.indexOf('bgm3.ogg') === -1 && sf.skip_menu_bgm !== true) {
+    tf.need_play_bgm = true;
+}
+[endscript]
+
+[if exp="tf.need_play_bgm == true"]
+    [playbgm storage="bgm3.ogg" loop="true"]
 [endif]
 
+; 一度通ったらフラグを解除
 [iscript]
 sf.skip_menu_bgm = false;
 [endscript]
@@ -236,18 +252,21 @@ sf.skip_menu_bgm = false;
 
 [image layer="2" page="fore" storage="UI/rogo.png" x="340" y="35" width="680" height="350" reflect="false"]
 
-; --- ボタン表示 ---
-; 自ファイル内ジャンプなので storage は指定しない（target のみ）
-
+; --- ボタン表示（変更なし） ---
+; メインボタン群（中央）
 [button target="*game_start" graphic="button/button30.png" enterimg="button/button30_1.png" x="510" y="380" width="250"]
 [button target="*game_chara_select" graphic="button/button31.png" enterimg="button/button31_1.png" x="510" y="460" width="250"]
 [button target="*game_option" graphic="button/button32.png" enterimg="button/button32_1.png" x="510" y="545" width="250"]
 [button target="*game_credit" graphic="button/button33.png" enterimg="button/button33_1.png" x="510" y="630" width="250"]
+
+; 右側サブボタン群（上：デバッグ / 下：リセット）
+[button target="*debug_start" graphic="button/button1.png" enterimg="button/button01.png" x="980" y="545" width="250" height="50"]
+[button target="*reset_start" graphic="button/button38.png" enterimg="button/button38_1.png" x="980" y="630" width="250" height="50"]
 [s]
 
 ; --- ボタン押下処理 ---
 
-*game_start
+*game_start 
 [tb_keyconfig flag="1"]
 [jump storage="genre_select.ks" target="*genre_select"]
 [s]
@@ -263,4 +282,12 @@ sf.skip_menu_bgm = false;
 
 *game_credit
 [jump storage="credit.ks" target="*credit_start"]
+[s]
+
+*debug_start
+[jump storage="debug_Tools.ks" target="*debug_select"]
+[s]
+
+*reset_start
+[jump storage="reset.ks" target="*start"]
 [s]

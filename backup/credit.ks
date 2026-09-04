@@ -5,88 +5,37 @@
 *credit_start
 
 ;-----------------------------------------
-; BGM
-; 仮ファイル名
-; 後で正式なBGMファイル名に変更
+; 初期化・画面作成
 ;-----------------------------------------
-[playbgm storage="credit_bgm.ogg" loop="true"]
+[hidemenubutton]
+[cm]
+[tb_hide_message_window]
+[freeimage layer="0"]
+[freeimage layer="1"]
+[freeimage layer="2"]
 
-;-----------------------------------------
-; クレジット本文
-;-----------------------------------------
-
-[font size="28"]
-
-「新クイズで遊ぼう！」
-
-企画
-
-Akito_Tokikawa
-
-ゲーム開発
-
-Akito_Tokikawa
-ChatGPT（チャッピー）
-
-ゲームエンジン
-
-TyranoBuilder
-
-2015 © STRIKEWORKS All Rights Reserved.
-Developper: ShikemokuMK
-
-AI制作協力
-
-Gemini
-
-・クイズ問題制作協力
-・背景・UI・ボタン等の制作協力
-・オープニングムービー制作協力
-
-BGM
-
-「想い出のオルゴール 2018 / aum free Ver.」*
-作詞・作曲：D’elf
-歌：aum*
-提供：d-elf.com
-
-「ふわりと甘い休息（オルゴール）」
-提供：音楽の卵
-
-「無限大の小部屋」
-提供：音楽の卵
-
-CHARACTER ILLUSTRATION
-
-坂本アヒル 様
-
-・ずんだもん 立ち絵素材
-・四国めたん 立ち絵素材
-・春日部つむぎ 立ち絵素材
-・雨晴はう 立ち絵素材
-
-VOICE
-
-VOICEVOX
-
-・ずんだもん
-・四国めたん
-・春日部つむぎ
-・雨晴はう
-
-PLUGIN
-
-ティラノスクリプト スライダープラグイン
-
-製作者：さくた（@skt_tyrano）
-©2023 さくた@skt_tyrano
-License
+[bg storage="haikei/black.png" time="800"]
+[playbgm storage="BGM2.mp3" loop="true"]
 
 ;-----------------------------------------
-; BACK
+; HTMLの読み込み処理
 ;-----------------------------------------
+[html layer="1"]
+<div id="credit_wrapper" style="width:100%; height:100%; pointer-events:auto;"></div>
+[endhtml]
 
-[button graphic="button17.png" target=*credit_back]
+[iscript]
+// 外部HTMLファイルをロードして埋め込む
+$.get("data/others/plugin/credit/credit.html", function(data) {
+    $("#credit_wrapper").html(data);
+});
+[endscript]
+
+;-----------------------------------------
+; BACKボタンの配置
+;-----------------------------------------
+; ボタンのレイヤーを全面に押し出すため Fix ボタンを使用するか通常のボタンを配置
+[button graphic="button17.png" x="1000" y="600" target=*credit_back]
 
 [s]
 
@@ -98,7 +47,20 @@ License
 
 [stopbgm]
 
-; ※ここはタイトル画面のラベル確定後に変更
-; [jump storage="title_screen.ks" target="タイトルのラベル"]
+; ★ 1. 文字（メッセージレイヤー）を消去
+[cm]
+[tb_hide_message_window]
+
+; ★ 2. 各前景レイヤーに配置した画像・オブジェクトをすべて消去
+[freeimage layer="base"]
+[freeimage layer="0"]
+[freeimage layer="1"]
+[freeimage layer="2"]
+
+; ★ 3. 画面全体を一瞬黒で隠す（より自然に遷移させたい場合）
+[bg storage="haikei/black.png" time="100"]
+
+; ※タイトル画面へ戻る
+[jump storage="title_screen.ks" target="*show_menu"]
 
 [s]
