@@ -287,30 +287,6 @@ if (sf.selected_chara == "onp") {
     f.chara_w = 500;
 }
 
-// チュートリアル用ボイス
-f.tut_v1   = "voice/" + sf.selected_chara + "/tutorial_voice1.ogg";
-f.tut_v2   = "voice/" + sf.selected_chara + "/tutorial_voice2.ogg";
-f.tut_v3   = "voice/" + sf.selected_chara + "/tutorial_voice3.ogg";
-f.tut_v4   = "voice/" + sf.selected_chara + "/tutorial_voice4.ogg";
-f.tut_v5   = "voice/" + sf.selected_chara + "/tutorial_voice5.ogg";
-f.tut_v6   = "voice/" + sf.selected_chara + "/tutorial_voice6.ogg";
-f.tut_v7   = "voice/" + sf.selected_chara + "/tutorial_voice7.ogg";
-f.tut_v8   = "voice/" + sf.selected_chara + "/tutorial_voice8.ogg";
-f.tut_v9   = "voice/" + sf.selected_chara + "/tutorial_voice9.ogg";
-f.tut_v10  = "voice/" + sf.selected_chara + "/tutorial_voice10.ogg";
-f.tut_v11  = "voice/" + sf.selected_chara + "/tutorial_voice11.ogg";
-f.tut_v12  = "voice/" + sf.selected_chara + "/tutorial_voice12.ogg";
-f.tut_v13  = "voice/" + sf.selected_chara + "/tutorial_voice13.ogg";
-f.tut_v14  = "voice/" + sf.selected_chara + "/tutorial_voice14.ogg";
-f.tut_v15  = "voice/" + sf.selected_chara + "/tutorial_voice15.ogg";
-f.tut_v16  = "voice/" + sf.selected_chara + "/tutorial_voice16.ogg";
-f.tut_v17  = "voice/" + sf.selected_chara + "/tutorial_voice17.ogg";
-f.tut_v18  = "voice/" + sf.selected_chara + "/tutorial_voice18.ogg";
-f.tut_v19  = "voice/" + sf.selected_chara + "/tutorial_voice19.ogg";
-f.tut_v20  = "voice/" + sf.selected_chara + "/tutorial_voice20.ogg";
-f.tut_v21  = "voice/" + sf.selected_chara + "/tutorial_voice21.ogg";
-f.tut_v22  = "voice/" + sf.selected_chara + "/tutorial_voice22.ogg";
-
 // ウェルカム演出用ボイス
 f.wel_v1     = "voice/" + sf.selected_chara + "/welcome_voice1.ogg";
 f.wel_v_diff = "voice/" + sf.selected_chara + "/diff_" + tf.diff + ".ogg";
@@ -321,58 +297,9 @@ f.wel_v5     = "voice/" + sf.selected_chara + "/welcome_voice5.ogg";
 [endscript]
 
 
-; --- 初回判定 ＆ 演出分岐 ---
-
 ; EASY 以外の難易度はチュートリアル判定をスキップして強制的にウェルカム演出へ
-[jump cond="tf.diff != 'easy'" target="*welcome_scene" storage=""]
-
-; EASY の場合のみチュートリアル判定を行う
-[jump cond="!sf.tutorial_seen" target="*tutorial_scene" storage=""]
-[dialog type="confirm" text="チュートリアルを再生しますか？" target="*tutorial_scene" target_cancel="*welcome_scene" label_ok="はい" label_cancel="いいえ"]
-
+[jump target="*welcome_scene" storage=""]
 [s]
-
-
-; --- 3. チュートリアル分岐 ---
-
-*tutorial_scene
-
-[iscript]
-// 選択キャラを取得（初期値は onp）
-var chara = sf.selected_chara || 'onp';
-var num = 1;
-
-if (chara === 'onp') {
-    num = 1; // １人目
-} else if (chara === 'quiz') {
-    num = 2; // ２人目
-} else if (chara === 'tukuyomi') {
-    num = 3; // ３人目
-} else if (chara === 'ameno') {
-    num = 4; // ４人目
-} else if (chara === 'zunda') {
-    num = 5; // 隠しキャラ
-}
-
-tf.tut_file = "tutorial_serihu" + num + ".ks";
-
-// ★ クイズプレイ時（画面右側表示）のキャラクター別サイズ・座標を定義
-if (sf.selected_chara == "onp") {
-    f.q_x = "750"; f.q_y = "120"; f.q_w = "100";
-} else if (sf.selected_chara == "quiz") {
-    f.q_x = "830"; f.q_y = "180"; f.q_w = "400";
-} else if (sf.selected_chara == "tukuyomi") {
-    f.q_x = "800"; f.q_y = "160"; f.q_w = "450";
-} else if (sf.selected_chara == "ameno") {
-    f.q_x = "730"; f.q_y = "130"; f.q_w = "550";
-} else if (sf.selected_chara == "zunda") {
-    f.q_x = "830"; f.q_y = "150"; f.q_w = "500";
-}
-[endscript]
-
-; キャラごとのチュートリアルファイルへジャンプ
-[jump storage="&tf.tut_file" target="*start"]
-
 
 ; --- 4. ウェルカム演出 ---
 
@@ -914,6 +841,39 @@ if (wrong_indices.length >= 2) {
 [button storage="" target="*use_hint" graphic="button/button1.png" enterimg="button/button01.png" x="1000" y="600" name="hint_btn"]
 
 [jump target="*show_choices" storage=""]
+
+; ========================================
+; ★ 選択肢再描画用ラベル（ヒント使用時専用）
+; ========================================
+*redraw_choices_only
+
+[cm]
+
+; 選択肢ボタンを消去反映した状態で再描画
+[glink color="black" target="*check_answer" text="&tf.shuffled[0]" size="20" x="250" y="300" width="250" exp="tf.choice_num=0" cond="tf.show0"]
+[glink color="black" target="*check_answer" text="&tf.shuffled[1]" size="20" x="680" y="300" width="250" exp="tf.choice_num=1" cond="tf.show1"]
+[glink color="black" target="*check_answer" text="&tf.shuffled[2]" size="20" x="250" y="420" width="250" exp="tf.choice_num=2" cond="tf.show2"]
+[glink color="black" target="*check_answer" text="&tf.shuffled[3]" size="20" x="680" y="420" width="250" exp="tf.choice_num=3" cond="tf.show3"]
+
+; ヒントボタンを配置し、使用済み状態（グレーアウト）に設定
+[free layer="2" name="hint_btn"]
+[button storage="" target="*use_hint" graphic="button/button1.png" enterimg="button/button01.png" x="1000" y="600" name="hint_btn"]
+
+[iscript]
+$(".hint_btn").css({
+    "filter": "grayscale(100%)",
+    "opacity": "0.5",
+    "pointer-events": "none"
+});
+[endscript]
+
+; ★ 消えてしまったタイマーSEを鳴らし直す
+[stopse]
+[playse storage="se/timer2.ogg" loop="true" cond="tf.time_limit <= 15"]
+[playse storage="se/timer1.ogg" loop="true" cond="tf.time_limit > 15"]
+
+; ★ タイマーやゲージのアニメーションはいじらず、そのまま入力待ちにする
+[s]
 
 
 ; --- 時間切れ処理 ---
