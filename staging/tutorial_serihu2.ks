@@ -36,7 +36,6 @@
 
 ; ★ 移動開始前に再生中のボイスを完全に止める
 [stopse]
-[tb_hide_message_window]
 
 ; ★★★ クリックイベントを無効化してアニメーションをガード ★★★
 ; クリックによる次への進行を一時的にロック
@@ -51,10 +50,10 @@
 ; 念のため待機後もボイス停止を確実にする
 [stopse]
 
-[tb_show_message_window]
-
 ; --- ライフの説明 ---
-[image storage="tutorial/01.png" layer="2" x="100" y="100" width="600" name="tut_img"]
+[image storage="tutorial/01.png" layer="2" x="270" y="45" width="750" name="tut_img"]
+
+[tb_show_message_window]
 
 [stopse]
 [playse storage="&f.tut_v7"]
@@ -79,7 +78,7 @@
 [playse storage="&f.tut_v11"]
 次は制限時間よ！[p]
 
-[image storage="tutorial/02.png" layer="2" x="100" y="100" width="600" name="tut_img"]
+[image storage="tutorial/02.png" layer="2" x="270" y="45" width="750" name="tut_img"]
 
 [stopse]
 [playse storage="&f.tut_v12"]
@@ -96,7 +95,7 @@
 [playse storage="&f.tut_v14"]
 ……まあ、あんたみたいなドジのために「ヒント」も用意してあげたわよ。[p]
 
-[image storage="tutorial/04.png" layer="2" x="100" y="100" width="600" name="tut_img"]
+[image storage="tutorial/04.png" layer="2" x="270" y="45" width="750" name="tut_img"]
 
 [stopse]
 [playse storage="&f.tut_v15"]
