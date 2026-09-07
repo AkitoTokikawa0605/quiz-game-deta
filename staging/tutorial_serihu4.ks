@@ -44,7 +44,7 @@
 [stopse]
 
 ; --- ライフの説明 ---
-[image storage="tutorial/01.png" layer="2" x="100" y="100" width="600" name="tut_img"]
+[image storage="tutorial/01.png" layer="2" x="270" y="45" width="750" name="tut_img"]
 
 [tb_show_message_window]
 
@@ -67,7 +67,7 @@
 [playse storage="&f.tut_v9"]
 次は制限時間について説明するばい！[p]
 
-[image storage="tutorial/02.png" layer="2" x="100" y="100" width="600" name="tut_img"]
+[image storage="tutorial/02.png" layer="2" x="270" y="45" width="750" name="tut_img"]
 
 [stopse]
 [playse storage="&f.tut_v10"]
@@ -88,7 +88,7 @@
 [playse storage="&f.tut_v13"]
 次はヒントの説明ばするけん！！[p]
 
-[image storage="tutorial/04.png" layer="2" x="100" y="100" width="600" name="tut_img"]
+[image storage="tutorial/04.png" layer="2" x="270" y="45" width="750" name="tut_img"]
 
 [stopse]
 [playse storage="&f.tut_v14"]
