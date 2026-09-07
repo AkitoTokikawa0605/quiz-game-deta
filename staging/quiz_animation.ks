@@ -870,7 +870,7 @@ if (wrong_indices.length >= 2) {
 
 
 ; ========================================
-; 選択肢再描画用ラベル
+; ★ 選択肢再描画用ラベル
 ; ========================================
 *redraw_choices
 
@@ -885,6 +885,39 @@ if (wrong_indices.length >= 2) {
 [button storage="" target="*use_hint" graphic="button/button1.png" enterimg="button/button01.png" x="1000" y="600" name="hint_btn"]
 
 [jump target="*show_choices" storage=""]
+
+; ========================================
+; ★ 選択肢再描画用ラベル（ヒント使用時専用）
+; ========================================
+*redraw_choices_only
+
+[cm]
+
+; 選択肢ボタンを消去反映した状態で再描画
+[glink color="black" target="*check_answer" text="&tf.shuffled[0]" size="20" x="250" y="300" width="250" exp="tf.choice_num=0" cond="tf.show0"]
+[glink color="black" target="*check_answer" text="&tf.shuffled[1]" size="20" x="680" y="300" width="250" exp="tf.choice_num=1" cond="tf.show1"]
+[glink color="black" target="*check_answer" text="&tf.shuffled[2]" size="20" x="250" y="420" width="250" exp="tf.choice_num=2" cond="tf.show2"]
+[glink color="black" target="*check_answer" text="&tf.shuffled[3]" size="20" x="680" y="420" width="250" exp="tf.choice_num=3" cond="tf.show3"]
+
+; ヒントボタンを配置し、使用済み状態（グレーアウト）に設定
+[free layer="2" name="hint_btn"]
+[button storage="" target="*use_hint" graphic="button/button1.png" enterimg="button/button01.png" x="1000" y="600" name="hint_btn"]
+
+[iscript]
+$(".hint_btn").css({
+    "filter": "grayscale(100%)",
+    "opacity": "0.5",
+    "pointer-events": "none"
+});
+[endscript]
+
+; ★ 消えてしまったタイマーSEを鳴らし直す
+[stopse]
+[playse storage="se/timer2.ogg" loop="true" cond="tf.time_limit <= 15"]
+[playse storage="se/timer1.ogg" loop="true" cond="tf.time_limit > 15"]
+
+; ★ タイマーやゲージのアニメーションはいじらず、そのまま入力待ちにする
+[s]
 
 
 ; --- 時間切れ処理 ---
