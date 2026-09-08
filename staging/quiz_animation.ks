@@ -5,7 +5,18 @@
 
 *difficulty_select
 
+[iscript]
+// ★ タイトルや難易度選択に戻った時点で残存タイマーを確実に破棄
+if (tf.timer_id) {
+    clearTimeout(tf.timer_id);
+    tf.timer_id = null;
+}
+$(".time_gage").stop().css("transition", "none");
+[endscript]
+
 [hidemenubutton]
+
+[plugin name="ReloadHide"]
 
 [cm]
 [tb_hide_message_window]
@@ -63,23 +74,23 @@ tf.is_veryhard_unlocked = (sf[g + '_veryhard'] == true);
 ; 3. 画面全体でホバーを監視
 [iscript]
 if ($('#custom_tooltip').length === 0) {
-    $('body').append('<div id="custom_tooltip" style="position:fixed; display:none; z-index:999999; pointer-events:none; padding:10px 14px; background:rgba(0,0,0,0.85); color:#ffffff; font-size:15px; font-weight:bold; border-radius:6px; border:2px solid #ffffff; box-shadow:0 4px 10px rgba(0,0,0,0.5); max-width:320px; line-height:1.4;"></div>');
+$('body').append('<div id="custom_tooltip" style="position:fixed; display:none; z-index:999999; pointer-events:none; padding:10px 14px; background:rgba(0,0,0,0.85); color:#ffffff; font-size:15px; font-weight:bold; border-radius:6px; border:2px solid #ffffff; box-shadow:0 4px 10px rgba(0,0,0,0.5); max-width:320px; line-height:1.4;"></div>');
 }
 $(document).off('.custom_tt');
 $(document).on('mouseenter.custom_tt', '.button, .glink', function(e) {
-    var text = $(this).attr('hint');
-    if (text) {
-        $('#custom_tooltip').html(text).show();
-    }
+var text = $(this).attr('hint');
+if (text) {
+$('#custom_tooltip').html(text).show();
+}
 });
 $(document).on('mouseleave.custom_tt', '.button, .glink', function() {
-    $('#custom_tooltip').hide();
+$('#custom_tooltip').hide();
 });
 $(document).on('mousemove.custom_tt', '.button, .glink', function(e) {
-    $('#custom_tooltip').css({
-        top: (e.clientY + 15) + 'px',
-        left: (e.clientX + 15) + 'px'
-    });
+$('#custom_tooltip').css({
+top: (e.clientY + 15) + 'px',
+left: (e.clientX + 15) + 'px'
+});
 });
 [endscript]
 
@@ -89,9 +100,13 @@ $(document).on('mousemove.custom_tt', '.button, .glink', function(e) {
 *setup_game
 
 ; 決定時はツールチップを隠してイベントを解除
+
 [iscript]
 $('#custom_tooltip').hide();
 $(document).off('.custom_tt');
+
+// ★ キャラクター未定義ガード（書き出し直後の undefined エラー防止）
+sf.selected_chara = sf.selected_chara || 'onp';
 [endscript]
 
 [cm]
@@ -103,11 +118,10 @@ $(document).off('.custom_tt');
 [iscript]
 // 出題数を10問に設定
 tf.question_count = 10;
-
-// アニメクイズデータ（全80問）
+// ▼ アニメクイズデータ（全80問） ▼
 tf.all_questions = [
 {q: "第1問", difficulty: "easy", choices: ["アニメ『ドラえもん』で、ドラえもんが一番大好物な<br>食べ物は何でしょう？", "A.みたらし団子", "B.どら焼き", "C.カレーライス", "D.鉄"], ans: "B", explain: "どら焼きはドラえもんの大好物として知られる和菓子。作中でも頻繁に食べており、どら焼きのために行動することもある、ドラえもんを象徴する食べ物。"},
-{q: "第2問", difficulty: "easy", choices: ["『ポケットモンスター』の主人公、<br>サトシの最初の相棒といえば？", "A.ヒトカゲ", "B.ピカチュウ", "C.フシギダネ", "D.ゼニガメ"], ans: "B", explain: "ピカチュウはサトシがオーキド博士から譲り受けた最初のポケモン。最初は懐かなかったが、冒険を通じてかけがえのない相棒となった。"},
+{q: "第2問", difficulty: "easy", choices: ["『ポケットモンスター』の主人公、<br>サトシの最初の相棒といえば？", "A.ヒトカゲ", "B.ピカチュウ", "C.フシギダネ", "D.ゼニガメ"], ans: "B", explain: "ピカチュウはサトシがオーキド博士から譲り受けた最初のポケモン。<br>最初は懐かなかったが、冒険を通じてかけがえのない相棒となった。"},
 {q: "第3問", difficulty: "easy", choices: ["『アンパンマン』の作者は誰？", "A.藤子・F・不二雄", "B.やなせたかし", "C.手塚治虫", "D.鳥山明"], ans: "B", explain: "やなせたかしは『それいけ！アンパンマン』を生み出した漫画家・絵本作家。自分の顔をちぎって分け与えるという、独自のヒーロー像を描いた。"},
 {q: "第4問", difficulty: "easy", choices: ["『名探偵コナン』の主人公、江戸川コナンが本来の姿に戻るために追っている組織は？", "A.赤の組織", "B.黒の組織", "C.白の組織", "D.青の組織"], ans: "B", explain: "黒の組織は工藤新一に毒薬「APTX4869」を飲ませ、身体を幼児化させた謎の犯罪組織。全身黒づくめの衣装が特徴。"},
 {q: "第5問", difficulty: "easy", choices: ["『となりのトトロ』で、サツキとメイが出会う不思議な<br>存在として正しいものは？", "A.ネコバス", "B.小トトロ", "C.まっくろくろすけ", "D.トトロ"], ans: "D", explain: "トトロは豊かな自然が残る森の主として人知れず暮らしている不思議な生き物。サツキとメイの姉妹と出会い、交流を深めていく。"},
@@ -116,10 +130,10 @@ tf.all_questions = [
 {q: "第8問", difficulty: "easy", choices: ["『サザエさん』の磯野家で、一番年上なのは？", "A.フネ", "B.波平", "C.サザエ", "D.カツオ"], ans: "B", explain: "磯野波平は磯野家の大黒柱で、54歳。妻のフネは50歳とされている。"},
 {q: "第9問", difficulty: "easy", choices: ["『新世紀エヴァンゲリオン』で、<br>主人公・碇シンジが乗る機体は？", "A.エヴァンゲリオン零号機", "B.エヴァンゲリオン初号機", "C.エヴァンゲリオン弐号機", "D.エヴァンゲリオンMark.06"], ans: "B", explain: "碇シンジはネルフの最高司令官である父・ゲンドウに呼び出され、人型決戦兵器エヴァンゲリオン初号機のパイロットに選ばれた。"},
 {q: "第10問", difficulty: "easy", choices: ["『美少女戦士セーラームーン』で、主人公月野うさぎが<br>変身する決め台詞は？", "A.月に代わって<br>愛を届けるわ！", "B.月に代わって<br>おしおきよ！", "C.月のように輝くわ！", "D.月を見て戦うわ！"], ans: "B", explain: "セーラームーンに変身した月野うさぎが、敵と対峙した際に発する代表的な台詞が「月に代わっておしおきよ！」。"},
-{q: "第11問", difficulty: "easy", choices: ["『ドラゴンボール』で、孫悟空がクリリンとともに本格的な修行を受けた武道家は？", "A.界王様", "B.亀仙人", "C.神様", "D.ウイス"], ans: "B", explain: "亀仙人（武天長老）は亀仙流の創始者であり、若き日の孫悟空とクリリンを弟子に取り、重い亀の甲羅を背負わせるなどの修業を課した。"},
+{q: "第11問", difficulty: "easy", choices: ["『ドラゴンボール』で、孫悟空がクリリンとともに本格的な修業を受けた武道家は？", "A.界王様", "B.亀仙人", "C.神様", "D.ウイス"], ans: "B", explain: "亀仙人（武天老師）は亀仙流の創始者であり、若き日の孫悟空とクリリンを弟子に取り、重い亀の甲羅を背負わせるなどの修業を課した。"},
 {q: "第12問", difficulty: "easy", choices: ["『進撃の巨人』で、人類が居住する3つの壁の名前は？", "A.三重の壁", "B.マリア、ローゼ、シーナ", "C.大きな壁", "D.防衛壁"], ans: "B", explain: "巨人の侵入を防ぐために築かれた三重の壁は、外側から「ウォール・マリア」「ウォール・ローゼ」「ウォール・シーナ」と呼ばれる。"},
 {q: "第13問", difficulty: "easy", choices: ["『ちびまる子ちゃん』の主人公まる子の本名は？", "A.さくらさきこ", "B.さくらすみれ", "C.さくらももこ", "D.さくらともぞう"], ans: "C", explain: "「ちびまる子ちゃん」こと主人公の本名は「さくらももこ」。原作者・さくらももこの少女時代をモデルにした作品。"},
-{q: "第14問", difficulty: "easy", choices: ["『SPY×FAMILY』で、超能力（心を読む力）を<br>持つ少女の名前は？", "A.ヨル", "B.フィオナ", "C.ベッキー", "D.アーニャ"], ans: "D", explain: "アーニャ・フォージャーは組織の実験によって他人の心を読めるようになった少女。ロイドに引き取られ、仮初めの娘として生活する。"},
+{q: "第14問", difficulty: "easy", choices: ["『SPY×FAMILY』で、超能力（心を読む力）を<br>持つ少女の名前は？", "A.ヨル", "B.フィオナ", "C.ベッキー", "D.アーニャ"], ans: "D", explain: "アーニャ・フォージャーは組織の実験によって他人の心を読めるようになった少女。ロイドに引き取られ、娘として生活する。"},
 {q: "第15問", difficulty: "easy", choices: ["『暗殺教室』で、3年E組の担任を務める<br>黄色いタコ型の超生物は？", "A.殺せんせー", "B.烏間先生", "C.ビッチ先生", "D.死神"], ans: "A", explain: "最高速度マッハ20で移動する謎の超生物で、生徒たちから「殺せない先生」にちなんで「殺せんせー」と呼ばれるようになった。"},
 {q: "第16問", difficulty: "easy", choices: ["『かぐや様は告らせたい』の舞台となる超名門校の名前は？", "A.音ノ木坂学院", "B.秀知院学園", "C.開盟学園", "D.椚ヶ丘中学校"], ans: "B", explain: "秀知院学園（しゅうちいんがくえん）は、将来を期待された名門家系や富裕層の生徒が集まる、作中の舞台となる超名門校。"},
 {q: "第17問", difficulty: "easy", choices: ["『僕のヒーローアカデミア』で、主人公の緑谷出久が<br>受け継いだ個性の名前は？", "A.オール・フォー・ワン", "B.爆破", "C.ワン・フォー・オール", "D.半冷半燃"], ans: "C", explain: "「ワン・フォー・オール」は力をストックし、人から人へ引き継ぐ能力。無個性だった緑谷出久はオールマイトからこの能力を受け継いだ。"},
@@ -207,7 +221,7 @@ for (var i = tf.filtered.length - 1; i > 0; i--) {
     tf.filtered[j] = temp;
 }
 
-; 難易度別の出題問題抽出（通常動作）
+; 問題の抽出
 tf.selected_questions = tf.filtered.slice(0, tf.question_count);
 
 tf.current_index = 0;
@@ -217,34 +231,32 @@ tf.score = 0;
 if(tf.diff == "easy"){
     tf.max_life = 5;
     tf.life = 5;
-    tf.time_limit = 60;
-    tf.hint_count = 5;
+    tf.time_limit = 30;
+    tf.hint_count = 4;
     tf.current_bg = 'haikei/easy_haikei.png';
     tf.current_bgm = 'anime_easy.ogg';
 } else if(tf.diff == "normal"){
     tf.max_life = 4;
     tf.life = 4;
-    tf.time_limit = 60;
+    tf.time_limit = 25;
     tf.hint_count = 3;
     tf.current_bg = 'haikei/normal_haikei.png';
     tf.current_bgm = 'anime_normal.ogg';
 } else if(tf.diff == "hard"){
-    tf.max_life = 2;
-    tf.life = 2;
-    tf.time_limit = 60;
-    tf.hint_count = 1;
+    tf.max_life = 3;
+    tf.life = 3;
+    tf.time_limit = 20;
+    tf.hint_count = 2;
     tf.current_bg = 'haikei/hard_haikei.png';
     tf.current_bgm = 'anime_hard.ogg';
 } else if(tf.diff == "veryhard"){
-    tf.max_life = 1;
-    tf.life = 1;
+    tf.max_life = 2;
+    tf.life = 2;
     tf.time_limit = 15;
-    tf.hint_count = 0;
+    tf.hint_count = 1;
     tf.current_bg = 'haikei/very_hard_haikei.png';
     tf.current_bgm = 'anime_very_hard.ogg';
 }
-
-tf.life = tf.max_life;
 [endscript]
 
 [call storage="loading_scene.ks" target="*loading_start"]
@@ -255,6 +267,9 @@ tf.life = tf.max_life;
 
 ; --- 全体共通の変数初期化 ---
 [iscript]
+// キャラクター未定義ガード
+sf.selected_chara = sf.selected_chara || 'onp';
+
 if(tf.diff == "easy") { tf.diff_name = "イージー"; }
 else if(tf.diff == "normal") { tf.diff_name = "ノーマル"; }
 else if(tf.diff == "hard") { tf.diff_name = "ハード"; }
@@ -337,8 +352,9 @@ f.wel_v5     = "voice/" + sf.selected_chara + "/welcome_voice5.ogg";
 *tutorial_scene
 
 [iscript]
-// 選択キャラを取得（初期値は onp）
-var chara = sf.selected_chara || 'onp';
+// ★ sf.selected_chara 自体に初期値をセットして未定義（undefined）を防止
+sf.selected_chara = sf.selected_chara || 'onp';
+var chara = sf.selected_chara;
 var num = 1;
 
 if (chara === 'onp') {
@@ -596,34 +612,35 @@ if(tf.current_index >= tf.question_count){
 [free layer="2" name="question_text"]
 [free layer="2" name="q_count_text"]
 
-; ★ 出題前に演出用の古い立ち絵を画面から完全に消去
+; 出題前に演出用の古い立ち絵を画面から完全に消去
 [free layer="1" name="chara_stand"]
 [freeimage layer="1"]
 
-; ★ キャラ立ち絵（通常顔）描画の準備
+; キャラ立ち絵（通常顔）描画の準備
 [iscript]
-var chara = sf.selected_chara || 'onp';
-tf.chara_normal = chara + "/" + chara + "_normal.png";
+var c = sf.selected_chara;
+if (c !== 'onp' && c !== 'quiz' && c !== 'tukuyomi' && c !== 'ameno' && c !== 'zunda') {
+    c = 'onp';
+}
+tf.chara_normal = c + "/" + c + "_normal.png";
 
-// ★ 描画直前に tf. 変数へサイズと座標を確実にセット
-if (chara == 'onp') {
+if (c == 'onp') {
     tf.q_x = "900"; tf.q_y = "120"; tf.q_w = "550";
-} else if (chara == 'quiz') {
+} else if (c == 'quiz') {
     tf.q_x = "900"; tf.q_y = "140"; tf.q_w = "400";
-} else if (chara == 'tukuyomi') {
+} else if (c == 'tukuyomi') {
     tf.q_x = "900"; tf.q_y = "160"; tf.q_w = "450";
-} else if (chara == 'ameno') {
+} else if (c == 'ameno') {
     tf.q_x = "850"; tf.q_y = "130"; tf.q_w = "550";
-} else if (chara == 'zunda') {
+} else if (c == 'zunda') {
     tf.q_x = "900"; tf.q_y = "150"; tf.q_w = "500";
 }
 [endscript]
 
 [layopt layer="1" visible="true"]
-
 [image storage="&tf.chara_normal" layer="1" x="&tf.q_x" y="&tf.q_y" width="&tf.q_w" name="chara_stand"]
 
-; ★ 第1問目の開始時だけ、bgm1 を止めて難易度BGMに切り替える
+; 第1問目の開始時だけ、bgm1 を止めて難易度BGMに切り替える
 [if exp="tf.current_index == 0"]
     [stopbgm]
     [playbgm storage="&tf.current_bgm" loop="true"]
@@ -660,7 +677,7 @@ tf.show2 = true;
 tf.show3 = true;
 tf.hint_used = false;
 
-// 制限時間のミリ秒計算
+// 制限時間のミリ秒計算（例: 15秒なら 15000ms）
 tf.wait_time = tf.time_limit * 1000;
 [endscript]
 
@@ -737,13 +754,23 @@ $(".time_gage").stop().css({
     "display": "block"
 });
 
-// CSS transition で右側から削っていくアニメーションを開始
+// CSS transition でアニメーション開始
 setTimeout(function(){
     $(".time_gage").css({
         "transition": "clip-path " + tf.time_limit + "s linear",
         "clip-path": "inset(0 100% 0 0)"
     });
 }, 20);
+
+// ★ 走っているタイマーがあれば破棄し、新規でカウントダウンを設定
+if (tf.timer_id) {
+    clearTimeout(tf.timer_id);
+    tf.timer_id = null;
+}
+
+tf.timer_id = setTimeout(function(){
+    TYRANO.kag.ftag.startTag("jump", { target: "*time_up" });
+}, tf.wait_time);
 [endscript]
 
 ; タイマーSE再生
@@ -751,11 +778,8 @@ setTimeout(function(){
 [playse storage="se/timer2.ogg" loop="true" cond="tf.time_limit <= 15"]
 [playse storage="se/timer1.ogg" loop="true" cond="tf.time_limit > 15"]
 
-; カウントダウン待機
-[wait time="&tf.wait_time"]
-
-; 時間切れ時はそのまま *time_up へ
-[jump target="*time_up" storage=""]
+; カウントダウン中は入力待ち
+[s]
 
 
 ; --- 7. 回答判定処理 ---
@@ -766,17 +790,39 @@ setTimeout(function(){
 [stopse]
 
 [iscript]
+// ★ 回答ボタン押下時にタイマーを完全クリア
+if (tf.timer_id) {
+    clearTimeout(tf.timer_id);
+    tf.timer_id = null;
+}
+
 $(".time_gage").css("transition", "none");
 
 // 選択された回答のテキストを取得して正誤判定
 var selected_text = tf.shuffled[tf.choice_num];
 tf.is_correct = (selected_text === tf.correct_text);
 
-var chara = sf.selected_chara || 'onp';
+var c = sf.selected_chara;
+if (c !== 'onp' && c !== 'quiz' && c !== 'tukuyomi' && c !== 'ameno' && c !== 'zunda') {
+    c = 'onp';
+}
+
 if (tf.is_correct) {
-    tf.chara_result = chara + "/" + chara + "_smile.png";
+    tf.chara_result = c + "/" + c + "_happy.png";
 } else {
-    tf.chara_result = chara + "/" + chara + "_sad.png";
+    tf.chara_result = c + "/" + c + "_sad.png";
+}
+
+if (c == 'onp') {
+    tf.q_x = "900"; tf.q_y = "120"; tf.q_w = "550";
+} else if (c == 'quiz') {
+    tf.q_x = "900"; tf.q_y = "140"; tf.q_w = "400";
+} else if (c == 'tukuyomi') {
+    tf.q_x = "900"; tf.q_y = "160"; tf.q_w = "450";
+} else if (c == 'ameno') {
+    tf.q_x = "850"; tf.q_y = "130"; tf.q_w = "550";
+} else if (c == 'zunda') {
+    tf.q_x = "900"; tf.q_y = "150"; tf.q_w = "500";
 }
 [endscript]
 
@@ -785,8 +831,7 @@ if (tf.is_correct) {
 [free layer="2" name="time_cover"]
 [free layer="2" name="time_bar_hk"]
 
-; 表情の切り替え
-[freeimage layer="1"]
+[free layer="1" name="chara_stand"]
 [layopt layer="1" visible="true"]
 [image storage="&tf.chara_result" layer="1" x="&tf.q_x" y="&tf.q_y" width="&tf.q_w" name="chara_stand"]
 
@@ -797,7 +842,7 @@ if (tf.is_correct) {
     [eval exp="tf.score++"]
 
     [tb_show_message_window]
-    正解！[r]
+    正解！[p]
     解説：[emb exp='tf.selected_questions[tf.current_index].explain'][p]
 
 ; --- 不正解の場合 ---
@@ -812,35 +857,34 @@ if (tf.is_correct) {
     [call target="*show_life" storage=""]
 
     [tb_show_message_window]
-    不正解……！[r]
+    不正解……！[p]
     正解は「[emb exp="tf.correct_text"]」でした。[r]
     解説：[emb exp='tf.selected_questions[tf.current_index].explain'][p]
 
 [endif]
 
+; メッセージ表示後の後処理
 [free layer="2" name="question_text"]
 [free layer="2" name="hint_btn"]
 
+; ライフ切れ判定
 [jump cond="tf.life <= 0" target="*quiz_end" storage=""]
 
-[freeimage layer="1"]
+; 次の問題へ進む直前に立ち絵を消去
+[free layer="1" name="chara_stand"]
 [eval exp="tf.current_index++"]
 [jump target="*question_loop" storage=""]
 
 
 ; ========================================
-; ヒントボタン押下時の処理（ハズレ2つ消去）
+; ★ ヒントボタン押下時の処理
 ; ========================================
 *use_hint
 
 [iscript]
-// 1. ヒント使用フラグをONにする
 tf.hint_used = true;
-
-// 2. 残りヒント数を減らす
 tf.hint_count--;
 
-// 3. 不正解の選択肢から「2つ」をランダムに選んで非表示にする
 var q = tf.selected_questions[tf.current_index];
 var correct = tf.correct_text;
 var wrong_indices = [];
@@ -866,7 +910,7 @@ if (wrong_indices.length >= 2) {
 
 [playse storage="se/hint.ogg" clear="true"]
 
-[jump target="*redraw_choices" storage=""]
+[jump target="*redraw_choices_only" storage=""]
 
 
 ; ========================================
@@ -929,6 +973,12 @@ $(".hint_btn").css({
 [playse storage="se/time_up.ogg"]
 
 [iscript]
+// ★ 時間切れ時もタイマーを完全クリア
+if (tf.timer_id) {
+    clearTimeout(tf.timer_id);
+    tf.timer_id = null;
+}
+
 $(".time_gage").css("transition", "none");
 [endscript]
 
@@ -937,44 +987,77 @@ $(".time_gage").css("transition", "none");
 [free layer="2" name="time_cover"]
 [free layer="2" name="time_bar_hk"]
 
+; 残念顔の表示準備 & 座標設定
 [iscript]
-var chara = sf.selected_chara || 'onp';
-tf.chara_sad = chara + "/" + chara + "_sad.png";
+var c = sf.selected_chara;
+if (c !== 'onp' && c !== 'quiz' && c !== 'tukuyomi' && c !== 'ameno' && c !== 'zunda') {
+    c = 'onp';
+}
+tf.chara_sad = c + "/" + c + "_sad.png";
+
+if (c == 'onp') {
+    tf.q_x = "900"; tf.q_y = "120"; tf.q_w = "550";
+} else if (c == 'quiz') {
+    tf.q_x = "900"; tf.q_y = "140"; tf.q_w = "400";
+} else if (c == 'tukuyomi') {
+    tf.q_x = "900"; tf.q_y = "160"; tf.q_w = "450";
+} else if (c == 'ameno') {
+    tf.q_x = "850"; tf.q_y = "130"; tf.q_w = "550";
+} else if (c == 'zunda') {
+    tf.q_x = "900"; tf.q_y = "150"; tf.q_w = "500";
+}
 [endscript]
 
-[freeimage layer="1"]
+; キャラの立ち絵を残念顔に変更
+[free layer="1" name="chara_stand"]
 [layopt layer="1" visible="true"]
 [image storage="&tf.chara_sad" layer="1" x="&tf.q_x" y="&tf.q_y" width="&tf.q_w" name="chara_stand"]
 
+; ライフ減少処理
 [eval exp="tf.life = tf.life - 1"]
 [iscript]
 if(tf.life < 0){ tf.life = 0; }
 [endscript]
 
+; ハート表示を更新
 [call target="*show_life" storage=""]
 
+; メッセージウィンドウ表示＆クリック待ち
 [tb_show_message_window]
 
-時間切れ！[r]
+時間切れ！[p]
 正解は「[emb exp="tf.correct_text"]」でした。[p]
 
 解説：[emb exp='tf.selected_questions[tf.current_index].explain'][p]
 
+; テキストメッセージとヒントボタンを削除
 [free layer="2" name="question_text"]
 [free layer="2" name="hint_btn"]
 
+; ライフ判定（0になったらゲームオーバー/リザルトへ）
 [jump cond="tf.life <= 0" target="*quiz_end" storage=""]
 
-[freeimage layer="1"]
+; まだライフが残っている場合は立ち絵を消して次の問題へ
+[free layer="1" name="chara_stand"]
 [eval exp="tf.current_index++"]
 [jump target="*question_loop" storage=""]
 
 
-; --- ゲーム終了処理 ---
+; --- ゲーム終了処理（★ アニメジャンル仕様） ---
 
 *quiz_end
 
 [cm]
+
+[iscript]
+// ★ リザルト移行時もバックグラウンドタイマーを確実に破棄
+if (tf.timer_id) {
+    clearTimeout(tf.timer_id);
+    tf.timer_id = null;
+}
+$(".time_gage").stop().css("transition", "none");
+[endscript]
+
 [tb_show_message_window]
 
 貴方は[emb exp="tf.question_count"]点中[emb exp="tf.score"]点です！[p]
@@ -990,23 +1073,27 @@ tf.show_dialog = false;
 tf.alert_msg   = "";
 
 if (tf.diff === 'easy' && !sf[key_normal]) {
-    sf.animation_easy = true;
-    sf[key_normal] = true;
-    sf.unlock_genre = true;
-    tf.show_dialog = true;
-    tf.alert_msg = "全ジャンル ＆ アニメの難易度 NORMAL が解放されました！";
+    sf.animation_easy   = true;
+    sf.anime_easy       = true;
+    sf[key_normal]      = true;
+    sf.anime_normal     = true;
+    sf.unlock_genre     = true;
+    tf.show_dialog      = true;
+    tf.alert_msg        = "アニメの難易度 NORMAL が解放されました！";
 }
 
 if (tf.diff === 'normal' && tf.score >= 8 && !sf[key_hard]) {
-    sf[key_hard] = true;
-    tf.show_dialog = true;
-    tf.alert_msg = "8問以上正解！アニメの難易度 HARD が解放されました！";
+    sf[key_hard]    = true;
+    sf.anime_hard   = true;
+    tf.show_dialog  = true;
+    tf.alert_msg    = "8問以上正解！アニメの難易度 HARD が解放されました！";
 }
 
 if (tf.diff === 'hard' && tf.score >= 8 && tf.life == tf.max_life && !sf[key_veryhard]) {
-    sf[key_veryhard] = true;
-    tf.show_dialog = true;
-    tf.alert_msg = "ノーダメージクリア！アニメの最高難易度 VERY HARD が解放されました！";
+    sf[key_veryhard]   = true;
+    sf.anime_veryhard  = true;
+    tf.show_dialog     = true;
+    tf.alert_msg       = "ノーダメージクリア！アニメの最高難易度 VERY HARD が解放されました！";
 }
 [endscript]
 
