@@ -5,7 +5,18 @@
 
 *difficulty_select
 
+[iscript]
+// ★ バックグラウンドタイマーの残存を破棄
+if (tf.timer_id) {
+    clearTimeout(tf.timer_id);
+    tf.timer_id = null;
+}
+$(".time_gage").stop().css("transition", "none");
+[endscript]
+
 [hidemenubutton]
+
+[plugin name="ReloadHide"]
 
 [cm]
 [tb_hide_message_window]
@@ -93,6 +104,9 @@ left: (e.clientX + 15) + 'px'
 [iscript]
 $('#custom_tooltip').hide();
 $(document).off('.custom_tt');
+
+// 未定義ガード
+sf.selected_chara = sf.selected_chara || 'onp';
 [endscript]
 
 [cm]
@@ -136,7 +150,7 @@ tf.all_questions = [
 {q: "第28問", difficulty: "normal", choices: ["ネットスラングで「鯖（さば）」が指すものは？", "A.魚", "B.サーバー", "C.サービス", "D.サブアカウント"], ans: "B", explain: "コンピューターの「サーバー（Server）」を略した「サバ」に、同じ読みの「鯖」の漢字を当てたネットスラング。"},
 {q: "第29問", difficulty: "normal", choices: ["「エモい」の語源として有力なのは？", "A.絵文字", "B.ええもん", "C.英語の「emotional（エモーショナル）」", "D.エモー"], ans: "C", explain: "英語の「emotional（エモーショナル）」に由来するという説が有力。切なさや懐かしさなど、言葉では表しにくい感情を抱いた時などに使われる。"},
 {q: "第30問", difficulty: "normal", choices: ["「かまちょ」とは？", "A.かまぼこ大好き", "B.かまってほしい人", "C.鎌倉に行く人", "D.構わないでほしい人"], ans: "B", explain: "「かまってちょうだい」を略した言葉。誰かに構ってほしい人や、構ってもらいたがる様子を指す。"},
-{q: "第31問", difficulty: "normal", choices: ["「沼る」とは？", "A.湿地に行く", "B.何かに深くハマって抜け出せなくなること", "C.泥遊びをする", "D.沼で釣りをする"], ans: "B", explain: "底なし沼に例え、趣味や作品、人物などに深くハマり、なかなか抜け出せなくなる状態を指す。"},
+{q: "第31問", difficulty: "normal", choices: ["「沼る」とは？", "A.湿地に行く", "B.何かに深くハマ弁して抜け出せなくなること", "C.泥遊びをする", "D.沼で釣りをする"], ans: "B", explain: "底なし沼に例え、趣味や作品、人物などに深くハマり、なかなか抜け出せなくなる状態を指す。"},
 {q: "第32問", difficulty: "normal", choices: ["ネットスラング「オワタ」の元になったAA（アスキーアート）で表される文字は？", "A.（^o^）", "B.（´・ω・`）", "C.orz", "D.＼(^o^)／"], ans: "D", explain: "「＼(^o^)／」は「人生オワタ」などのフレーズとともに広まり、絶望的な状況を表すAAとして定着した。"},
 {q: "第33問", difficulty: "normal", choices: ["「鯖落ち」とは？", "A.魚が落ちる", "B.サーバーがダウンして利用できなくなること", "C.サービスが落ちる", "D.サブキャラが落ちる"], ans: "B", explain: "「サーバーダウン」を意味する俗称。アクセス集中や障害などによってサーバーが正常に動作せず、サービスやWebサイトなどが利用できなくなることを指す。"},
 {q: "第34問", difficulty: "normal", choices: ["ネットスラングで「○○民」と呼ぶ場合、一般的に何を指す？", "A.その場所・作品・サービスなどに集まる人々", "B.国民", "C.住民票を持つ人", "D.県民"], ans: "A", explain: "特定のネット掲示板やコミュニティ、SNS、作品などに集まるユーザーやファンを、そこに住む住民になぞらえて「〜民」と呼ぶ。"},
@@ -207,39 +221,39 @@ for (var i = tf.filtered.length - 1; i > 0; i--) {
     tf.filtered[j] = temp;
 }
 
-; 10問を抽出してセット
+// 10問を抽出
 tf.selected_questions = tf.filtered.slice(0, tf.question_count);
 
 tf.current_index = 0;
 tf.score = 0;
 
-; 設定値初期化（★ BGMをネットスラングジャンル用へ変更）
+; 設定値初期化
 if(tf.diff == "easy"){
     tf.max_life = 5;
     tf.life = 5;
-    tf.time_limit = 60;
-    tf.hint_count = 5;
+    tf.time_limit = 30;
+    tf.hint_count = 4;
     tf.current_bg = 'haikei/easy_haikei.png';
     tf.current_bgm = 'netslang_easy.ogg';
 } else if(tf.diff == "normal"){
     tf.max_life = 4;
     tf.life = 4;
-    tf.time_limit = 60;
+    tf.time_limit = 25;
     tf.hint_count = 3;
     tf.current_bg = 'haikei/normal_haikei.png';
     tf.current_bgm = 'netslang_normal.ogg';
 } else if(tf.diff == "hard"){
-    tf.max_life = 2;
-    tf.life = 2;
-    tf.time_limit = 60;
-    tf.hint_count = 1;
+    tf.max_life = 3;
+    tf.life = 3;
+    tf.time_limit = 20;
+    tf.hint_count = 2;
     tf.current_bg = 'haikei/hard_haikei.png';
     tf.current_bgm = 'netslang_hard.ogg';
 } else if(tf.diff == "veryhard"){
-    tf.max_life = 1;
-    tf.life = 1;
+    tf.max_life = 2;
+    tf.life = 2;
     tf.time_limit = 15;
-    tf.hint_count = 0;
+    tf.hint_count = 1;
     tf.current_bg = 'haikei/very_hard_haikei.png';
     tf.current_bgm = 'netslang_very_hard.ogg';
 }
@@ -286,29 +300,6 @@ if (sf.selected_chara == "onp") {
     f.chara_w = 500;
 }
 
-// チュートリアル用ボイス
-f.tut_v1   = "voice/" + sf.selected_chara + "/tutorial_voice1.ogg";
-f.tut_v2   = "voice/" + sf.selected_chara + "/tutorial_voice2.ogg";
-f.tut_v3   = "voice/" + sf.selected_chara + "/tutorial_voice3.ogg";
-f.tut_v4   = "voice/" + sf.selected_chara + "/tutorial_voice4.ogg";
-f.tut_v5   = "voice/" + sf.selected_chara + "/tutorial_voice5.ogg";
-f.tut_v6   = "voice/" + sf.selected_chara + "/tutorial_voice6.ogg";
-f.tut_v7   = "voice/" + sf.selected_chara + "/tutorial_voice7.ogg";
-f.tut_v8   = "voice/" + sf.selected_chara + "/tutorial_voice8.ogg";
-f.tut_v9   = "voice/" + sf.selected_chara + "/tutorial_voice9.ogg";
-f.tut_v10  = "voice/" + sf.selected_chara + "/tutorial_voice10.ogg";
-f.tut_v11  = "voice/" + sf.selected_chara + "/tutorial_voice11.ogg";
-f.tut_v12  = "voice/" + sf.selected_chara + "/tutorial_voice12.ogg";
-f.tut_v13  = "voice/" + sf.selected_chara + "/tutorial_voice13.ogg";
-f.tut_v14  = "voice/" + sf.selected_chara + "/tutorial_voice14.ogg";
-f.tut_v15  = "voice/" + sf.selected_chara + "/tutorial_voice15.ogg";
-f.tut_v16  = "voice/" + sf.selected_chara + "/tutorial_voice16.ogg";
-f.tut_v17  = "voice/" + sf.selected_chara + "/tutorial_voice17.ogg";
-f.tut_v18  = "voice/" + sf.selected_chara + "/tutorial_voice18.ogg";
-f.tut_v19  = "voice/" + sf.selected_chara + "/tutorial_voice19.ogg";
-f.tut_v20  = "voice/" + sf.selected_chara + "/tutorial_voice20.ogg";
-f.tut_v21  = "voice/" + sf.selected_chara + "/tutorial_voice21.ogg";
-f.tut_v22  = "voice/" + sf.selected_chara + "/tutorial_voice22.ogg";
 
 // ウェルカム演出用ボイス
 f.wel_v1     = "voice/" + sf.selected_chara + "/welcome_voice1.ogg";
@@ -320,58 +311,9 @@ f.wel_v5     = "voice/" + sf.selected_chara + "/welcome_voice5.ogg";
 [endscript]
 
 
-; --- 初回判定 ＆ 演出分岐 ---
-
 ; EASY 以外の難易度はチュートリアル判定をスキップして強制的にウェルカム演出へ
-[jump cond="tf.diff != 'easy'" target="*welcome_scene" storage=""]
-
-; EASY の場合のみチュートリアル判定を行う
-[jump cond="!sf.tutorial_seen" target="*tutorial_scene" storage=""]
-[dialog type="confirm" text="チュートリアルを再生しますか？" target="*tutorial_scene" target_cancel="*welcome_scene" label_ok="はい" label_cancel="いいえ"]
-
+[jump target="*welcome_scene" storage=""]
 [s]
-
-
-; --- 3. チュートリアル分岐 ---
-
-*tutorial_scene
-
-[iscript]
-// 選択キャラを取得（初期値は onp）
-var chara = sf.selected_chara || 'onp';
-var num = 1;
-
-if (chara === 'onp') {
-    num = 1; // １人目
-} else if (chara === 'quiz') {
-    num = 2; // ２人目
-} else if (chara === 'tukuyomi') {
-    num = 3; // ３人目
-} else if (chara === 'ameno') {
-    num = 4; // ４人目
-} else if (chara === 'zunda') {
-    num = 5; // 隠しキャラ
-}
-
-tf.tut_file = "tutorial_serihu" + num + ".ks";
-
-// ★ クイズプレイ時（画面右側表示）のキャラクター別サイズ・座標を定義
-if (sf.selected_chara == "onp") {
-    f.q_x = "750"; f.q_y = "120"; f.q_w = "100";
-} else if (sf.selected_chara == "quiz") {
-    f.q_x = "830"; f.q_y = "180"; f.q_w = "400";
-} else if (sf.selected_chara == "tukuyomi") {
-    f.q_x = "800"; f.q_y = "160"; f.q_w = "450";
-} else if (sf.selected_chara == "ameno") {
-    f.q_x = "730"; f.q_y = "130"; f.q_w = "550";
-} else if (sf.selected_chara == "zunda") {
-    f.q_x = "830"; f.q_y = "150"; f.q_w = "500";
-}
-[endscript]
-
-; キャラごとのチュートリアルファイルへジャンプ
-[jump storage="&tf.tut_file" target="*start"]
-
 
 ; --- 4. ウェルカム演出 ---
 
@@ -596,35 +538,35 @@ if(tf.current_index >= tf.question_count){
 [free layer="2" name="question_text"]
 [free layer="2" name="q_count_text"]
 
-; ★ 出題前に演出用の古い立ち絵を画面から完全に消去
+; 出題前に演出用の古い立ち絵を画面から完全に消去
 [free layer="1" name="chara_stand"]
 [freeimage layer="1"]
 
-; ★ キャラ立ち絵（通常顔）描画の準備
+; キャラ立ち絵（通常顔）描画の準備
 [iscript]
-var chara = sf.selected_chara || 'onp';
-tf.chara_normal = chara + "/" + chara + "_normal.png";
+var c = sf.selected_chara;
+if (c !== 'onp' && c !== 'quiz' && c !== 'tukuyomi' && c !== 'ameno' && c !== 'zunda') {
+    c = 'onp';
+}
+tf.chara_normal = c + "/" + c + "_normal.png";
 
-// ★ 描画直前に tf. 変数へサイズと座標を確実にセット（undefined回避）
-if (chara == 'onp') {
+if (c == 'onp') {
     tf.q_x = "900"; tf.q_y = "120"; tf.q_w = "550";
-} else if (chara == 'quiz') {
+} else if (c == 'quiz') {
     tf.q_x = "900"; tf.q_y = "140"; tf.q_w = "400";
-} else if (chara == 'tukuyomi') {
+} else if (c == 'tukuyomi') {
     tf.q_x = "900"; tf.q_y = "160"; tf.q_w = "450";
-} else if (chara == 'ameno') {
+} else if (c == 'ameno') {
     tf.q_x = "850"; tf.q_y = "130"; tf.q_w = "550";
-} else if (chara == 'zunda') {
+} else if (c == 'zunda') {
     tf.q_x = "900"; tf.q_y = "150"; tf.q_w = "500";
 }
 [endscript]
 
 [layopt layer="1" visible="true"]
-
-; ★ &f. から &tf. に変更して呼び出し（これで確実に値が渡ります）
 [image storage="&tf.chara_normal" layer="1" x="&tf.q_x" y="&tf.q_y" width="&tf.q_w" name="chara_stand"]
 
-; ★ 第1問目の開始時だけ、bgm1 を止めて難易度BGMに切り替える
+; 第1問目の開始時だけ、bgm1 を止めて難易度BGMに切り替える
 [if exp="tf.current_index == 0"]
     [stopbgm]
     [playbgm storage="&tf.current_bgm" loop="true"]
@@ -661,7 +603,7 @@ tf.show2 = true;
 tf.show3 = true;
 tf.hint_used = false;
 
-// 制限時間のミリ秒計算（例: 15秒なら 15000ms）
+// 制限時間のミリ秒計算
 tf.wait_time = tf.time_limit * 1000;
 [endscript]
 
@@ -738,13 +680,23 @@ $(".time_gage").stop().css({
     "display": "block"
 });
 
-// CSS transition で右側から削っていくアニメーションを開始
+// CSS transition でアニメーション開始
 setTimeout(function(){
     $(".time_gage").css({
         "transition": "clip-path " + tf.time_limit + "s linear",
         "clip-path": "inset(0 100% 0 0)"
     });
 }, 20);
+
+// タイマーカウントダウン設定
+if (tf.timer_id) {
+    clearTimeout(tf.timer_id);
+    tf.timer_id = null;
+}
+
+tf.timer_id = setTimeout(function(){
+    TYRANO.kag.ftag.startTag("jump", { target: "*time_up" });
+}, tf.wait_time);
 [endscript]
 
 ; タイマーSE再生
@@ -752,11 +704,8 @@ setTimeout(function(){
 [playse storage="se/timer2.ogg" loop="true" cond="tf.time_limit <= 15"]
 [playse storage="se/timer1.ogg" loop="true" cond="tf.time_limit > 15"]
 
-; ★ カウントダウン待機
-[wait time="&tf.wait_time"]
-
-; 時間切れ時はそのまま *time_up へ
-[jump target="*time_up" storage=""]
+; カウントダウン中は入力待ち
+[s]
 
 
 ; --- 7. 回答判定処理 ---
@@ -767,17 +716,39 @@ setTimeout(function(){
 [stopse]
 
 [iscript]
+// 回答ボタン押下時にタイマーを完全クリア
+if (tf.timer_id) {
+    clearTimeout(tf.timer_id);
+    tf.timer_id = null;
+}
+
 $(".time_gage").css("transition", "none");
 
 // 選択された回答のテキストを取得して正誤判定
 var selected_text = tf.shuffled[tf.choice_num];
 tf.is_correct = (selected_text === tf.correct_text);
 
-var chara = sf.selected_chara || 'onp';
+var c = sf.selected_chara;
+if (c !== 'onp' && c !== 'quiz' && c !== 'tukuyomi' && c !== 'ameno' && c !== 'zunda') {
+    c = 'onp';
+}
+
 if (tf.is_correct) {
-    tf.chara_result = chara + "/" + chara + "_smile.png";
+    tf.chara_result = c + "/" + c + "_happy.png";
 } else {
-    tf.chara_result = chara + "/" + chara + "_sad.png";
+    tf.chara_result = c + "/" + c + "_sad.png";
+}
+
+if (c == 'onp') {
+    tf.q_x = "900"; tf.q_y = "120"; tf.q_w = "550";
+} else if (c == 'quiz') {
+    tf.q_x = "900"; tf.q_y = "140"; tf.q_w = "400";
+} else if (c == 'tukuyomi') {
+    tf.q_x = "900"; tf.q_y = "160"; tf.q_w = "450";
+} else if (c == 'ameno') {
+    tf.q_x = "850"; tf.q_y = "130"; tf.q_w = "550";
+} else if (c == 'zunda') {
+    tf.q_x = "900"; tf.q_y = "150"; tf.q_w = "500";
 }
 [endscript]
 
@@ -786,26 +757,23 @@ if (tf.is_correct) {
 [free layer="2" name="time_cover"]
 [free layer="2" name="time_bar_hk"]
 
-; 表情の切り替え
-[freeimage layer="1"]
+[free layer="1" name="chara_stand"]
 [layopt layer="1" visible="true"]
 [image storage="&tf.chara_result" layer="1" x="&tf.q_x" y="&tf.q_y" width="&tf.q_w" name="chara_stand"]
 
 ; --- 正解の場合 ---
 [if exp="tf.is_correct == true"]
 
-    ; ★ 前のSEをクリアして確実に正解音を再生
     [playse storage="se/seikai.ogg" clear="true"]
     [eval exp="tf.score++"]
 
     [tb_show_message_window]
-    正解！[r]
+    正解！[p]
     解説：[emb exp='tf.selected_questions[tf.current_index].explain'][p]
 
 ; --- 不正解の場合 ---
 [else]
 
-    ; ★ 前のSEをクリアして確実に不正解音を再生
     [playse storage="se/hazure.ogg" clear="true"]
     [eval exp="tf.life = tf.life - 1"]
     [iscript]
@@ -815,47 +783,44 @@ if (tf.is_correct) {
     [call target="*show_life" storage=""]
 
     [tb_show_message_window]
-    不正解……！[r]
+    不正解……！[p]
     正解は「[emb exp="tf.correct_text"]」でした。[r]
     解説：[emb exp='tf.selected_questions[tf.current_index].explain'][p]
 
 [endif]
 
+; メッセージ表示後の後処理
 [free layer="2" name="question_text"]
 [free layer="2" name="hint_btn"]
 
+; ライフ切れ判定
 [jump cond="tf.life <= 0" target="*quiz_end" storage=""]
 
-[freeimage layer="1"]
+; まだライフが残っている場合は立ち絵を消して次の問題へ
+[free layer="1" name="chara_stand"]
 [eval exp="tf.current_index++"]
 [jump target="*question_loop" storage=""]
 
 
 ; ========================================
-; ★ ヒントボタン押下時の処理（ハズレ2つ消去）
+; ★ ヒントボタン押下時の処理
 ; ========================================
 *use_hint
 
 [iscript]
-// 1. ヒント使用フラグをONにする
 tf.hint_used = true;
-
-// 2. 残りヒント数を減らす
 tf.hint_count--;
 
-// 3. 不正解の選択肢から「2つ」をランダムに選んで非表示にする
 var q = tf.selected_questions[tf.current_index];
 var correct = tf.correct_text;
 var wrong_indices = [];
 
-// 表示中で、かつ不正解の選択肢インデックスを配列に抽出
 for (var i = 0; i < 4; i++) {
     if (tf.shuffled[i] !== correct && tf["show" + i] === true) {
         wrong_indices.push(i);
     }
 }
 
-// ハズレ選択肢をランダムにシャッフル
 for (var k = wrong_indices.length - 1; k > 0; k--) {
     var m = Math.floor(Math.random() * (k + 1));
     var tmp = wrong_indices[k];
@@ -863,7 +828,6 @@ for (var k = wrong_indices.length - 1; k > 0; k--) {
     wrong_indices[m] = tmp;
 }
 
-// シャッフルした配列から先頭2つを取り出して非表示（false）にする
 if (wrong_indices.length >= 2) {
     tf["show" + wrong_indices[0]] = false;
     tf["show" + wrong_indices[1]] = false;
@@ -872,25 +836,59 @@ if (wrong_indices.length >= 2) {
 
 [playse storage="se/hint.ogg" clear="true"]
 
-[jump target="*redraw_choices" storage=""]
+[jump target="*redraw_choices_only" storage=""]
+
 
 ; ========================================
 ; ★ 選択肢再描画用ラベル
 ; ========================================
 *redraw_choices
 
-; ボタン類を一括削除して残った選択肢のみ再配置
 [cm]
 
 [glink color="black" target="*check_answer" text="&tf.shuffled[0]" size="20" x="250" y="300" width="250" exp="tf.choice_num=0" cond="tf.show0"]
 [glink color="black" target="*check_answer" text="&tf.shuffled[1]" size="20" x="680" y="300" width="250" exp="tf.choice_num=1" cond="tf.show1"]
 [glink color="black" target="*check_answer" text="&tf.shuffled[2]" size="20" x="250" y="420" width="250" exp="tf.choice_num=2" cond="tf.show2"]
-[glink color="black" target="*check_answer" text="&tf.shuffled[3]" size="20" x="680" y="420" width="250" exp="tf.choice_num=3" cond="tf.show3"]
+[glink color="black" target="*check_answer" text="&tf.shuffled[3]" size="20" x="680" y="420" width="250" exp="tf.show3"]
 
 [free layer="2" name="hint_btn"]
 [button storage="" target="*use_hint" graphic="button/button1.png" enterimg="button/button01.png" x="1000" y="600" name="hint_btn"]
 
 [jump target="*show_choices" storage=""]
+
+; ========================================
+; ★ 選択肢再描画用ラベル（ヒント使用時専用）
+; ========================================
+*redraw_choices_only
+
+[cm]
+
+; 選択肢ボタンを消去反映した状態で再描画
+[glink color="black" target="*check_answer" text="&tf.shuffled[0]" size="20" x="250" y="300" width="250" exp="tf.choice_num=0" cond="tf.show0"]
+[glink color="black" target="*check_answer" text="&tf.shuffled[1]" size="20" x="680" y="300" width="250" exp="tf.choice_num=1" cond="tf.show1"]
+[glink color="black" target="*check_answer" text="&tf.shuffled[2]" size="20" x="250" y="420" width="250" exp="tf.choice_num=2" cond="tf.show2"]
+[glink color="black" target="*check_answer" text="&tf.shuffled[3]" size="20" x="680" y="420" width="250" exp="tf.show3"]
+
+; ヒントボタンを配置し、使用済み状態（グレーアウト）に設定
+[free layer="2" name="hint_btn"]
+[button storage="" target="*use_hint" graphic="button/button1.png" enterimg="button/button01.png" x="1000" y="600" name="hint_btn"]
+
+[iscript]
+$(".hint_btn").css({
+    "filter": "grayscale(100%)",
+    "opacity": "0.5",
+    "pointer-events": "none"
+});
+[endscript]
+
+; ★ 消えてしまったタイマーSEを鳴らし直す
+[stopse]
+[playse storage="se/timer2.ogg" loop="true" cond="tf.time_limit <= 15"]
+[playse storage="se/timer1.ogg" loop="true" cond="tf.time_limit > 15"]
+
+; ★ タイマーやゲージのアニメーションはいじらず、そのまま入力待ちにする
+[s]
+
 
 ; --- 時間切れ処理 ---
 
@@ -901,6 +899,12 @@ if (wrong_indices.length >= 2) {
 [playse storage="se/time_up.ogg"]
 
 [iscript]
+// 時間切れ時もタイマーを完全クリア
+if (tf.timer_id) {
+    clearTimeout(tf.timer_id);
+    tf.timer_id = null;
+}
+
 $(".time_gage").css("transition", "none");
 [endscript]
 
@@ -909,44 +913,77 @@ $(".time_gage").css("transition", "none");
 [free layer="2" name="time_cover"]
 [free layer="2" name="time_bar_hk"]
 
+; 残念顔の表示準備 & 座標設定
 [iscript]
-var chara = sf.selected_chara || 'onp';
-tf.chara_sad = chara + "/" + chara + "_sad.png";
+var c = sf.selected_chara;
+if (c !== 'onp' && c !== 'quiz' && c !== 'tukuyomi' && c !== 'ameno' && c !== 'zunda') {
+    c = 'onp';
+}
+tf.chara_sad = c + "/" + c + "_sad.png";
+
+if (c == 'onp') {
+    tf.q_x = "900"; tf.q_y = "120"; tf.q_w = "550";
+} else if (c == 'quiz') {
+    tf.q_x = "900"; tf.q_y = "140"; tf.q_w = "400";
+} else if (c == 'tukuyomi') {
+    tf.q_x = "900"; tf.q_y = "160"; tf.q_w = "450";
+} else if (c == 'ameno') {
+    tf.q_x = "850"; tf.q_y = "130"; tf.q_w = "550";
+} else if (c == 'zunda') {
+    tf.q_x = "900"; tf.q_y = "150"; tf.q_w = "500";
+}
 [endscript]
 
-[freeimage layer="1"]
+; キャラの立ち絵を残念顔に変更
+[free layer="1" name="chara_stand"]
 [layopt layer="1" visible="true"]
 [image storage="&tf.chara_sad" layer="1" x="&tf.q_x" y="&tf.q_y" width="&tf.q_w" name="chara_stand"]
 
+; ライフ減少処理
 [eval exp="tf.life = tf.life - 1"]
 [iscript]
 if(tf.life < 0){ tf.life = 0; }
 [endscript]
 
+; ハート表示を更新
 [call target="*show_life" storage=""]
 
+; メッセージウィンドウ表示＆クリック待ち
 [tb_show_message_window]
 
-時間切れ！[r]
+時間切れ！[p]
 正解は「[emb exp="tf.correct_text"]」でした。[p]
 
 解説：[emb exp='tf.selected_questions[tf.current_index].explain'][p]
 
+; テキストメッセージとヒントボタンを削除
 [free layer="2" name="question_text"]
 [free layer="2" name="hint_btn"]
 
+; ライフ判定（0になったらゲームオーバー/リザルトへ）
 [jump cond="tf.life <= 0" target="*quiz_end" storage=""]
 
-[freeimage layer="1"]
+; まだライフが残っている場合は立ち絵を消して次の問題へ
+[free layer="1" name="chara_stand"]
 [eval exp="tf.current_index++"]
 [jump target="*question_loop" storage=""]
 
 
-; --- ゲーム終了処理（★ ネットスラングジャンル仕様へ変更） ---
+; --- ゲーム終了処理（★ ネットスラングジャンル仕様） ---
 
 *quiz_end
 
 [cm]
+
+[iscript]
+// リザルト移行時もバックグラウンドタイマーを確実に破棄
+if (tf.timer_id) {
+    clearTimeout(tf.timer_id);
+    tf.timer_id = null;
+}
+$(".time_gage").stop().css("transition", "none");
+[endscript]
+
 [tb_show_message_window]
 
 貴方は[emb exp="tf.question_count"]点中[emb exp="tf.score"]点です！[p]
@@ -962,23 +999,23 @@ tf.show_dialog = false;
 tf.alert_msg   = "";
 
 if (tf.diff === 'easy' && !sf[key_normal]) {
-    sf.netslang_easy = true; // 表記揺れ等への対応
-    sf[key_normal] = true;
-    sf.unlock_genre = true;
-    tf.show_dialog = true;
-    tf.alert_msg = "全ジャンル ＆ ネットスラングの難易度 NORMAL が解放されました！";
+    sf.netslang_easy  = true;
+    sf[key_normal]    = true;
+    sf.unlock_genre   = true;
+    tf.show_dialog    = true;
+    tf.alert_msg      = "ネットスラングの難易度 NORMAL が解放されました！";
 }
 
 if (tf.diff === 'normal' && tf.score >= 8 && !sf[key_hard]) {
-    sf[key_hard] = true;
-    tf.show_dialog = true;
-    tf.alert_msg = "8問以上正解！ネットスラングの難易度 HARD が解放されました！";
+    sf[key_hard]    = true;
+    tf.show_dialog  = true;
+    tf.alert_msg    = "8問以上正解！ネットスラングの難易度 HARD が解放されました！";
 }
 
 if (tf.diff === 'hard' && tf.score >= 8 && tf.life == tf.max_life && !sf[key_veryhard]) {
-    sf[key_veryhard] = true;
-    tf.show_dialog = true;
-    tf.alert_msg = "ノーダメージクリア！ネットスラングの最高難易度 VERY HARD が解放されました！";
+    sf[key_veryhard]   = true;
+    tf.show_dialog     = true;
+    tf.alert_msg       = "ノーダメージクリア！ネットスラングの最高難易度 VERY HARD が解放されました！";
 }
 [endscript]
 
