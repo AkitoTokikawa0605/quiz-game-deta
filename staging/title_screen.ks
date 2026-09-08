@@ -13,7 +13,7 @@
 ; 1. オープニング動画再生
 ; ========================================
 
-[movie storage="sdp.mp4" skip="false"]
+[movie storage="StarDustProject.mp4" skip="false"]
 
 [cm]
 [wt]
