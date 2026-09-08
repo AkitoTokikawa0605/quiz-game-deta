@@ -250,7 +250,7 @@ sf.skip_menu_bgm = false;
 [button target="*game_credit" graphic="button/button33.png" enterimg="button/button33_1.png" x="510" y="630" width="250"]
 
 ; 右側サブボタン（リセットのみ配置）
-[button target="*reset_start" graphic="button/button38.png" enterimg="button/button38_1.png" x="980" y="630" width="250" height="50"]
+[button target="*reset_start" graphic="button/button38.png" enterimg="button/button38_1.png" x="980" y="630" width="250"]
 [s]
 
 ; --- ボタン押下処理 ---
