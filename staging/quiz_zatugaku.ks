@@ -5,6 +5,15 @@
 
 *difficulty_select
 
+[iscript]
+// ★ バックグラウンドタイマーの残存を破棄
+if (tf.timer_id) {
+    clearTimeout(tf.timer_id);
+    tf.timer_id = null;
+}
+$(".time_gage").stop().css("transition", "none");
+[endscript]
+
 [hidemenubutton]
 
 [plugin name="ReloadHide"]
@@ -95,6 +104,9 @@ left: (e.clientX + 15) + 'px'
 [iscript]
 $('#custom_tooltip').hide();
 $(document).off('.custom_tt');
+
+// 未定義ガード
+sf.selected_chara = sf.selected_chara || 'onp';
 [endscript]
 
 [cm]
@@ -113,7 +125,7 @@ tf.all_questions = [
 {q: "第3問", difficulty: "easy", choices: ["水は何度で沸騰するでしょう（1気圧下）？", "A.80℃", "B.90℃", "C.100℃", "D.110℃"], ans: "C", explain: "水は標準大気圧下で100℃になると沸騰する。"},
 {q: "第4問", difficulty: "easy", choices: ["おにぎりの具として、一般的によく知られているものは？", "A.石", "B.チョコ", "C.バナナ", "D.梅干し"], ans: "D", explain: "梅干しは日本の伝統的な保存食で、おにぎりの具として代表的な存在。"},
 {q: "第5問", difficulty: "easy", choices: ["1年は何ヶ月あるでしょう？", "A.10ヶ月", "B.11ヶ月", "C.12ヶ月", "D.13ヶ月"], ans: "C", explain: "グレゴリオ暦では1年は12ヶ月で構成される。"},
-{q: "第6问", difficulty: "easy", choices: ["ウサギの長い耳には、どのような役割がある？", "A.水中で呼吸すること", "B.体温調節を助けること", "C.飛ぶこと", "D.音をよく聞くこと"], ans: "D", explain: "ウサギの耳は音を集めて周囲の音を聞き取り、天敵などを察知するのに役立つ。また、血管が多く、体温調節にも利用される。"},
+{q: "第6問", difficulty: "easy", choices: ["ウサギの長い耳には、どのような役割がある？", "A.水中で呼吸すること", "B.体温調節を助けること", "C.飛ぶこと", "D.音をよく聞くこと"], ans: "D", explain: "ウサギの耳は音を集めて周囲の音を聞き取り、天敵などを察知するのに役立つ。また、血管が多く、体温調節にも利用される。"},
 {q: "第7問", difficulty: "easy", choices: ["信号機の色で「止まれ」は？", "A.青", "B.黄", "C.赤", "D.緑"], ans: "C", explain: "赤信号は道路交通法において、歩行者や車両に停止位置を越えて進行してはならないことを示す色である。"},
 {q: "第8問", difficulty: "easy", choices: ["太陽が昇る方角は？", "A.北", "B.南", "C.東", "D.西"], ans: "C", explain: "地球が西から東へ自転しているため、地上から見ると太陽は東から昇り西へ沈むように見える。"},
 {q: "第9問", difficulty: "easy", choices: ["「猫」を英語で言うと？", "A.Dog", "B.Cat", "C.Bird", "D.Fish"], ans: "B", explain: "猫を表す基本的な英単語は「Cat」であり、子猫は「Kitten」と呼ばれる。"},
@@ -208,13 +220,13 @@ for (var i = tf.filtered.length - 1; i > 0; i--) {
     tf.filtered[j] = temp;
 }
 
-; 10問分を抽出
+// 10問を抽出
 tf.selected_questions = tf.filtered.slice(0, tf.question_count);
 
 tf.current_index = 0;
 tf.score = 0;
 
-; 設定値初期化（★ BGMを雑学ジャンル用へ変更・ライフ初期値を正常修正）
+; 設定値初期化
 if(tf.diff == "easy"){
     tf.max_life = 5;
     tf.life = 5;
@@ -589,7 +601,7 @@ tf.show2 = true;
 tf.show3 = true;
 tf.hint_used = false;
 
-// 制限時間のミリ秒計算（例: 15秒なら 15000ms）
+// 制限時間のミリ秒計算
 tf.wait_time = tf.time_limit * 1000;
 [endscript]
 
@@ -636,7 +648,7 @@ $(".question_text").css({
 [glink color="black" target="*check_answer" text="&tf.shuffled[0]" size="20" x="250" y="300" width="250" exp="tf.choice_num=0" cond="tf.show0"]
 [glink color="black" target="*check_answer" text="&tf.shuffled[1]" size="20" x="680" y="300" width="250" exp="tf.choice_num=1" cond="tf.show1"]
 [glink color="black" target="*check_answer" text="&tf.shuffled[2]" size="20" x="250" y="420" width="250" exp="tf.choice_num=2" cond="tf.show2"]
-[glink color="black" target="*check_answer" text="&tf.shuffled[3]" size="20" x="680" y="420" width="250" exp="tf.choice_num=3" cond="tf.show3"]
+[glink color="black" target="*check_answer" text="&tf.shuffled[3]" size="20" x="680" y="420" width="250" exp="tf.show3"]
 
 [free layer="2" name="hint_btn"]
 [button storage="" target="*use_hint" graphic="button/button1.png" enterimg="button/button01.png" x="1000" y="600" name="hint_btn"]
@@ -674,7 +686,7 @@ setTimeout(function(){
     });
 }, 20);
 
-// ★ 走っているタイマーがあれば破棄し、新規でカウントダウンを設定
+// タイマーカウントダウン設定
 if (tf.timer_id) {
     clearTimeout(tf.timer_id);
     tf.timer_id = null;
@@ -702,7 +714,7 @@ tf.timer_id = setTimeout(function(){
 [stopse]
 
 [iscript]
-// ★ 回答ボタン押下時にタイマーを完全クリア
+// 回答ボタン押下時にタイマーを完全クリア
 if (tf.timer_id) {
     clearTimeout(tf.timer_id);
     tf.timer_id = null;
@@ -782,7 +794,7 @@ if (c == 'onp') {
 ; ライフ切れ判定
 [jump cond="tf.life <= 0" target="*quiz_end" storage=""]
 
-; 次の問題へ進む直前に立ち絵を消去
+; まだライフが残っている場合は立ち絵を消して次の問題へ
 [free layer="1" name="chara_stand"]
 [eval exp="tf.current_index++"]
 [jump target="*question_loop" storage=""]
@@ -822,7 +834,7 @@ if (wrong_indices.length >= 2) {
 
 [playse storage="se/hint.ogg" clear="true"]
 
-[jump target="*redraw_choices" storage=""]
+[jump target="*redraw_choices_only" storage=""]
 
 
 ; ========================================
@@ -835,7 +847,7 @@ if (wrong_indices.length >= 2) {
 [glink color="black" target="*check_answer" text="&tf.shuffled[0]" size="20" x="250" y="300" width="250" exp="tf.choice_num=0" cond="tf.show0"]
 [glink color="black" target="*check_answer" text="&tf.shuffled[1]" size="20" x="680" y="300" width="250" exp="tf.choice_num=1" cond="tf.show1"]
 [glink color="black" target="*check_answer" text="&tf.shuffled[2]" size="20" x="250" y="420" width="250" exp="tf.choice_num=2" cond="tf.show2"]
-[glink color="black" target="*check_answer" text="&tf.shuffled[3]" size="20" x="680" y="420" width="250" exp="tf.choice_num=3" cond="tf.show3"]
+[glink color="black" target="*check_answer" text="&tf.shuffled[3]" size="20" x="680" y="420" width="250" exp="tf.show3"]
 
 [free layer="2" name="hint_btn"]
 [button storage="" target="*use_hint" graphic="button/button1.png" enterimg="button/button01.png" x="1000" y="600" name="hint_btn"]
@@ -853,7 +865,7 @@ if (wrong_indices.length >= 2) {
 [glink color="black" target="*check_answer" text="&tf.shuffled[0]" size="20" x="250" y="300" width="250" exp="tf.choice_num=0" cond="tf.show0"]
 [glink color="black" target="*check_answer" text="&tf.shuffled[1]" size="20" x="680" y="300" width="250" exp="tf.choice_num=1" cond="tf.show1"]
 [glink color="black" target="*check_answer" text="&tf.shuffled[2]" size="20" x="250" y="420" width="250" exp="tf.choice_num=2" cond="tf.show2"]
-[glink color="black" target="*check_answer" text="&tf.shuffled[3]" size="20" x="680" y="420" width="250" exp="tf.choice_num=3" cond="tf.show3"]
+[glink color="black" target="*check_answer" text="&tf.shuffled[3]" size="20" x="680" y="420" width="250" exp="tf.show3"]
 
 ; ヒントボタンを配置し、使用済み状態（グレーアウト）に設定
 [free layer="2" name="hint_btn"]
@@ -885,7 +897,7 @@ $(".hint_btn").css({
 [playse storage="se/time_up.ogg"]
 
 [iscript]
-// ★ 時間切れ時もタイマーを完全クリア
+// 時間切れ時もタイマーを完全クリア
 if (tf.timer_id) {
     clearTimeout(tf.timer_id);
     tf.timer_id = null;
@@ -960,6 +972,16 @@ if(tf.life < 0){ tf.life = 0; }
 *quiz_end
 
 [cm]
+
+[iscript]
+// リザルト移行時もバックグラウンドタイマーを確実に破棄
+if (tf.timer_id) {
+    clearTimeout(tf.timer_id);
+    tf.timer_id = null;
+}
+$(".time_gage").stop().css("transition", "none");
+[endscript]
+
 [tb_show_message_window]
 
 貴方は[emb exp="tf.question_count"]点中[emb exp="tf.score"]点です！[p]
