@@ -997,13 +997,21 @@ tf.show_dialog = false;
 tf.alert_msg   = "";
 
 if (tf.diff === 'easy' && !sf[key_normal]) {
+    // 表記揺れ（zatsugaku / zatugaku）の両方にフラグを立てて保持
     sf.zatugaku_easy = true;
+    sf.zatsugaku_easy = true;
     sf.trivia_easy   = true;
     sf[key_normal]   = true;
     sf.trivia_normal = true;
     sf.unlock_genre  = true;
     tf.show_dialog   = true;
     tf.alert_msg     = "全ジャンル ＆ 雑学の難易度 NORMAL が解放されました！";
+
+    // ★ 全ジャンルEASY達成チェック（ここで最後の場合の解放通知を追加）
+    if (sf.animation_easy && sf.game_easy && sf.netslang_easy) {
+        sf.unlock_zunda = true;
+        tf.alert_msg   += "\n★ 全ジャンルEASYクリア！キャラクター「ずんだもん」が解放されました！";
+    }
 }
 
 if (tf.diff === 'normal' && tf.score >= 8 && !sf[key_hard]) {
