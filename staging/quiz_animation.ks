@@ -1080,6 +1080,12 @@ if (tf.diff === 'easy' && !sf[key_normal]) {
     sf.unlock_genre     = true;
     tf.show_dialog      = true;
     tf.alert_msg        = "アニメの難易度 NORMAL が解放されました！";
+
+    // ★ 全ジャンルEASY達成チェック（ここでずんだもん解放メッセージを追加）
+    if (sf.game_easy && sf.netslang_easy && (sf.zatugaku_easy || sf.zatsugaku_easy)) {
+        sf.unlock_zunda = true;
+        tf.alert_msg   += "\n★ 全ジャンルEASYクリア！キャラクター「ずんだもん」が解放されました！";
+    }
 }
 
 if (tf.diff === 'normal' && tf.score >= 8 && !sf[key_hard]) {
