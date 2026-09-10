@@ -99,7 +99,7 @@
 
 [stopse]
 [playse storage="&f.tut_v18"]
-もう一度確認したいときは、アニメの"EASY"でいつでも見直せるのだ。[p]
+もう一度確認したいときは、アニメのEASYでいつでも見直せるのだ。[p]
 
 [stopse]
 [playse storage="&f.tut_v19"]
