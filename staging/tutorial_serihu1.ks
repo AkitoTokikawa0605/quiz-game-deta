@@ -113,7 +113,7 @@
 
 [stopse]
 [playse storage="&f.tut_v18"]
-再度確認したい場合は「EASY」でチュートリアルが確認ができるので[p]
+再度確認したい場合は「アニメ EASY」でチュートリアルが確認ができるので[p]
 
 [stopse]
 [playse storage="&f.tut_v19"]
