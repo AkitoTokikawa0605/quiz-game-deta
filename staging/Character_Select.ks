@@ -42,8 +42,8 @@ if (f.current_idx == undefined) {
     f.current_idx = 1;
 }
 
-// 全ジャンルEASYクリア判定
-if (sf.animation_easy && sf.game_easy && sf.netslang_easy && sf.zatsugaku_easy) {
+// 全ジャンルEASYクリア判定（zatugaku / zatsugaku の表記揺れに対応）
+if (sf.animation_easy && sf.game_easy && sf.netslang_easy && (sf.zatugaku_easy || sf.zatsugaku_easy)) {
     sf.unlock_zunda = true;
 }
 
