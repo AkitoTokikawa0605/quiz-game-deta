@@ -974,11 +974,7 @@ if(tf.life < 0){ tf.life = 0; }
 [cm]
 
 [iscript]
-// リザルト移行時もバックグラウンドタイマーを確実に破棄
-if (tf.timer_id) {
-    clearTimeout(tf.timer_id);
-    tf.timer_id = null;
-}
+if (tf.timer_id) { clearTimeout(tf.timer_id); tf.timer_id = null; }
 $(".time_gage").stop().css("transition", "none");
 [endscript]
 
@@ -996,40 +992,59 @@ var key_veryhard = tf.current_genre + '_veryhard';
 tf.show_dialog = false;
 tf.alert_msg   = "";
 
-if (tf.diff === 'easy' && !sf[key_normal]) {
-    // 表記揺れ（zatsugaku / zatugaku）の両方にフラグを立てて保持
-    sf.zatugaku_easy = true;
-    sf.zatsugaku_easy = true;
-    sf.trivia_easy   = true;
-    sf[key_normal]   = true;
-    sf.trivia_normal = true;
-    sf.unlock_genre  = true;
-    tf.show_dialog   = true;
-    tf.alert_msg     = "全ジャンル ＆ 雑学の難易度 NORMAL が解放されました！";
+// ライフ残量（完走判定）チェック
+if (tf.life > 0) {
 
-    // ★ 全ジャンルEASY達成チェック（ここで最後の場合の解放通知を追加）
-    if (sf.animation_easy && sf.game_easy && sf.netslang_easy) {
-        sf.unlock_zunda = true;
-        tf.alert_msg   += "\n★ 全ジャンルEASYクリア！キャラクター「ずんだもん」が解放されました！";
+    if (tf.diff === 'easy') {
+        sf.zatugaku_easy = true;
+        sf.zatsugaku_easy = true;
+        sf.trivia_easy   = true;
+
+        if (!sf[key_normal] && !sf.trivia_normal) {
+            sf[key_normal]   = true;
+            sf.trivia_normal = true;
+            sf.unlock_genre  = true;
+            tf.show_dialog   = true;
+            tf.alert_msg     = "全ジャンル ＆ 雑学の難易度 NORMAL が解放されました！";
+        }
+
+        if (!sf.unlock_zunda && sf.animation_easy && sf.game_easy && sf.netslang_easy) {
+            sf.unlock_zunda = true;
+            tf.show_dialog  = true;
+            if (tf.alert_msg !== "") { tf.alert_msg += "\n"; }
+            tf.alert_msg   += "★ 全ジャンルEASYクリア！キャラクター「ずんだもん」が解放されました！";
+        }
     }
-}
 
-if (tf.diff === 'normal' && tf.score >= 8 && !sf[key_hard]) {
-    sf[key_hard]    = true;
-    sf.trivia_hard  = true;
-    tf.show_dialog  = true;
-    tf.alert_msg    = "8問以上正解！雑学の難易度 HARD が解放されました！";
-}
+    if (tf.diff === 'normal' && tf.score >= 8 && !sf[key_hard] && !sf.trivia_hard) {
+        sf[key_hard]    = true;
+        sf.trivia_hard  = true;
+        tf.show_dialog  = true;
+        tf.alert_msg    = "8問以上正解！雑学の難易度 HARD が解放されました！";
+    }
 
-if (tf.diff === 'hard' && tf.score >= 8 && tf.life == tf.max_life && !sf[key_veryhard]) {
-    sf[key_veryhard]   = true;
-    sf.trivia_veryhard = true;
-    tf.show_dialog     = true;
-    tf.alert_msg       = "ノーダメージクリア！雑学の最高難易度 VERY HARD が解放されました！";
+    if (tf.diff === 'hard' && tf.score >= 8 && tf.life == tf.max_life && !sf[key_veryhard] && !sf.trivia_veryhard) {
+        sf[key_veryhard]   = true;
+        sf.trivia_veryhard = true;
+        tf.show_dialog     = true;
+        tf.alert_msg       = "ノーダメージクリア！雑学の最高難易度 VERY HARD が解放されました！";
+    }
+
+} else {
+    tf.show_dialog = true;
+    tf.alert_msg   = "残念！ライフがなくなってしまいました……もう一度挑戦してみよう！";
 }
 [endscript]
 
+; ★ 解放・失敗ダイアログの表示
 [dialog type="alert" text="&tf.alert_msg" cond="tf.show_dialog == true"]
+
+; ★ システム変数を強制保存
+[save_sf]
+
+; ★ タイトルに戻る案内メッセージを表示
+[tb_show_message_window]
+タイトルに戻ります。[p]
 
 [tb_hide_message_window]
 [freeimage layer="2"]
