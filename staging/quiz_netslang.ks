@@ -1024,7 +1024,7 @@ if (tf.life > 0) {
     if (tf.diff === 'hard' && tf.score >= 8 && tf.life == tf.max_life && !sf[key_veryhard]) {
         sf[key_veryhard]   = true;
         tf.show_dialog     = true;
-        tf.alert_msg       = "ノーダメージクリア！ネットスラングの最高難易度 VERY HARD が解放されました！";
+        tf.alert_msg       = "ノーミスクリア！ネットスラングの最高難易度 VERY HARD が解放されました！";
     }
 
 } else {
