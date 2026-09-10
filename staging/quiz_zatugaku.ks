@@ -1005,7 +1005,7 @@ if (tf.life > 0) {
             sf.trivia_normal = true;
             sf.unlock_genre  = true;
             tf.show_dialog   = true;
-            tf.alert_msg     = "全ジャンル ＆ 雑学の難易度 NORMAL が解放されました！";
+            tf.alert_msg     = "雑学の難易度 NORMAL が解放されました！";
         }
 
         if (!sf.unlock_zunda && sf.animation_easy && sf.game_easy && sf.netslang_easy) {
@@ -1027,7 +1027,7 @@ if (tf.life > 0) {
         sf[key_veryhard]   = true;
         sf.trivia_veryhard = true;
         tf.show_dialog     = true;
-        tf.alert_msg       = "ノーダメージクリア！雑学の最高難易度 VERY HARD が解放されました！";
+        tf.alert_msg       = "ノーミスクリア！雑学の最高難易度 VERY HARD が解放されました！";
     }
 
 } else {
