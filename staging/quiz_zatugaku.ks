@@ -1040,7 +1040,7 @@ if (tf.life > 0) {
 [dialog type="alert" text="&tf.alert_msg" cond="tf.show_dialog == true"]
 
 ; ★ システム変数を強制保存
-[save_sf]
+[savesf]
 
 ; ★ タイトルに戻る案内メッセージを表示
 [tb_show_message_window]
