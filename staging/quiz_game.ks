@@ -53,47 +53,52 @@ tf.is_veryhard_unlocked = (sf[g + '_veryhard'] == true);
 [if exp="tf.is_normal_unlocked == true"]
     [button target="*setup_game" graphic="button/button35.png" enterimg="button/button35_1.png" x="350" y="250" width="250" height="450" exp="tf.diff='normal'" hint="標準難易度：通常のバランスで楽しみたい方へ"]
 [else]
-    [image storage="../fgimage/button2/button035.png" x="350" y="250" width="250" height="450" layer="2"]
+    [button target="*locked_click" graphic="../fgimage/button2/button035.png" x="350" y="250" width="250" height="450" hint="EASYモードをクリアすると解放されます。"]
 [endif]
 
 ; --- HARD ---
 [if exp="tf.is_hard_unlocked == true"]
     [button target="*setup_game" graphic="button/button36.png" enterimg="button/button36_1.png" x="650" y="250" width="250" height="450" exp="tf.diff='hard'" hint="上級者向け：歯ごたえのある戦いを楽しみたい方へ"]
 [else]
-    [image storage="../fgimage/button2/button036.png" x="650" y="250" width="250" height="450" layer="2"]
+    [button target="*locked_click" graphic="../fgimage/button2/button036.png" x="650" y="250" width="250" height="450" hint="NORMALモードで8問以上正解すると解放されます。"]
 [endif]
 
 ; --- VERY HARD ---
 [if exp="tf.is_veryhard_unlocked == true"]
     [button target="*setup_game" graphic="button/button37.png" enterimg="button/button37_1.png" x="950" y="250" width="250" height="450" exp="tf.diff='veryhard'" hint="鬼畜難易度：極限の挑戦を求める方へ"]
 [else]
-    [image storage="../fgimage/button2/button037.png" x="950" y="250" width="250" height="450" layer="2"]
+    [button target="*locked_click" graphic="../fgimage/button2/button037.png" x="950" y="250" width="250" height="450" hint="HARDモードをノーダメージクリアすると解放されます。"]
 [endif]
 
 
-; 3. 画面全体でホバーを監視（変更なし）
+; 3. 画面全体でホバーを監視
 [iscript]
 if ($('#custom_tooltip').length === 0) {
-$('body').append('<div id="custom_tooltip" style="position:fixed; display:none; z-index:999999; pointer-events:none; padding:10px 14px; background:rgba(0,0,0,0.85); color:#ffffff; font-size:15px; font-weight:bold; border-radius:6px; border:2px solid #ffffff; box-shadow:0 4px 10px rgba(0,0,0,0.5); max-width:320px; line-height:1.4;"></div>');
+    $('body').append('<div id="custom_tooltip" style="position:fixed; display:none; z-index:999999; pointer-events:none; padding:10px 14px; background:rgba(0,0,0,0.85); color:#ffffff; font-size:15px; font-weight:bold; border-radius:6px; border:2px solid #ffffff; box-shadow:0 4px 10px rgba(0,0,0,0.5); max-width:320px; line-height:1.4;"></div>');
 }
 $(document).off('.custom_tt');
+
 $(document).on('mouseenter.custom_tt', '.button, .glink', function(e) {
-var text = $(this).attr('hint');
-if (text) {
-$('#custom_tooltip').html(text).show();
-}
+    var text = $(this).attr('hint');
+    if (text) {
+        $('#custom_tooltip').html(text).show();
+    }
 });
 $(document).on('mouseleave.custom_tt', '.button, .glink', function() {
-$('#custom_tooltip').hide();
+    $('#custom_tooltip').hide();
 });
 $(document).on('mousemove.custom_tt', '.button, .glink', function(e) {
-$('#custom_tooltip').css({
-top: (e.clientY + 15) + 'px',
-left: (e.clientX + 15) + 'px'
-});
+    $('#custom_tooltip').css({
+        top: (e.clientY + 15) + 'px',
+        left: (e.clientX + 15) + 'px'
+    });
 });
 [endscript]
 
+[s]
+
+; ★ ロック中ボタンを押した時のダミーラベル（何もせず画面にとどまる）
+*locked_click
 [s]
 
 
