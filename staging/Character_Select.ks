@@ -31,7 +31,7 @@ tf.is_locked = false;
 
 ; BGM
 [bgmopt volume="10"]
-[playbgm storage="bgm3.ogg" loop="true"]
+[playbgm storage="bgm4.ogg" loop="true"]
 
 ;================================
 ; 初期設定 ＆ 解放判定
