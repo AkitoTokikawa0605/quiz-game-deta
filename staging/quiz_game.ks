@@ -101,7 +101,6 @@ $(document).on('mousemove.custom_tt', '.button, .glink', function(e) {
 *locked_click
 [s]
 
-
 *setup_game
 
 ; 決定時はツールチップを隠してイベントを解除
